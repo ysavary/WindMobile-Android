@@ -1,0 +1,3 @@
+Permet de consulter en temps réel les conditions aérologiques des sites de vol libre.
+
+Cette application utilise le réseau des stations météo JDC (meteo.jdc.ch - 3 balises à ce jour). Elle affiche la force et la direction du vent, la température et l'humidité de l'air des différents sites de vols.

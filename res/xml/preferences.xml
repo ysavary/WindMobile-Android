@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_cat_stations">
+        <CheckBoxPreference android:key="operationalStationOnly" android:defaultValue="true"
+            android:title="@string/pref_operational_station_only_title" android:summary="@string/pref_operational_station_only_summary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_map">
+        <CheckBoxPreference android:key="mapSatellite" android:defaultValue="true"
+            android:title="@string/pref_map_satellite_title" android:summary="@string/pref_map_satellite_summary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_chart">
+        <ListPreference android:key="chartDuration" android:title="@string/pref_chart_duration_title"
+            android:summary="@string/pref_chart_duration_summary" android:dialogTitle="@string/pref_chart_duration_title"
+            android:entries="@array/chart_duration" android:entryValues="@array/chart_duration_value"
+            android:defaultValue="14400" />
+    </PreferenceCategory>
+</PreferenceScreen>

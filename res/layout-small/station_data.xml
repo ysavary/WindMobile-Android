@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/station_data"
+    android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <RelativeLayout android:id="@+id/station_view" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:padding="3sp">
+
+        <TextView android:id="@+id/station_name" style="@style/data_value" android:textSize="25sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/station_lastUpdate" style="@style/data_title" android:layout_toRightOf="@id/station_name"
+            android:layout_alignBaseline="@id/station_name" android:gravity="right" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/station_description" style="@style/data_label" android:layout_below="@id/station_name"
+            android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <View android:background="#FFFFFF" android:layout_height="1px" android:layout_width="fill_parent" />
+
+    <LinearLayout android:id="@+id/wind_view" android:orientation="horizontal" android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout android:id="@+id/wind_last_view" android:layout_weight="1" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:paddingLeft="3sp" android:paddingRight="3sp"
+            android:paddingBottom="3sp">
+
+            <TextView android:id="@+id/wind_last_title" style="@style/data_title" android:text="@string/wind_last_title"
+                android:gravity="left" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/wind_last_average_unit" style="@style/data_label" android:layout_below="@id/wind_last_title"
+                android:layout_alignParentRight="true" android:layout_marginTop="25sp" android:text="@string/kmh_unit"
+                android:gravity="right" android:layout_width="40sp" android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/wind_last_average" style="@style/data_value" android:layout_toLeftOf="@id/wind_last_average_unit"
+                android:layout_alignBaseline="@id/wind_last_average_unit" android:textSize="40sp" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/wind_last_max_unit" style="@style/data_label" android:layout_below="@id/wind_last_average_unit"
+                android:layout_alignParentRight="true" android:layout_marginTop="25sp" android:text="@string/kmh_unit"
+                android:gravity="right" android:layout_width="40sp" android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/wind_last_max" style="@style/data_value" android:layout_toLeftOf="@id/wind_last_max_unit"
+                android:layout_alignBaseline="@id/wind_last_max_unit" android:textSize="25sp" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/wind_last_max_label" style="@style/data_label" android:layout_toLeftOf="@id/wind_last_max"
+                android:layout_alignBaseline="@id/wind_last_max" android:text="@string/wind_max_label"
+                android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+            <TextView android:id="@+id/wind_trend_unit" style="@style/data_label" android:layout_below="@id/wind_last_max_unit"
+                android:layout_alignParentRight="true" android:layout_marginTop="20sp" android:gravity="right"
+                android:layout_width="40sp" android:layout_height="wrap_content" />
+
+            <ch.windmobile.view.TrendIcon android:id="@+id/wind_trend" android:layout_toLeftOf="@id/wind_trend_unit"
+                android:layout_alignBottom="@id/wind_trend_unit" android:layout_width="40sp" android:layout_height="40sp"
+                android:padding="3sp" />
+
+            <TextView android:id="@+id/wind_trend_label" style="@style/data_label" android:layout_toLeftOf="@id/wind_trend"
+                android:layout_alignBottom="@id/wind_trend" android:text="@string/wind_trend_label" android:gravity="center_vertical"
+                android:layout_width="fill_parent" android:layout_height="40sp" />
+        </RelativeLayout>
+
+        <View android:background="#FFFFFF" android:layout_width="1px" android:layout_height="fill_parent" />
+
+        <ch.windmobile.view.WindDirection android:id="@+id/wind_direction" android:layout_weight="1"
+            android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="3sp" />
+    </LinearLayout>
+
+    <View android:background="#FFFFFF" android:layout_height="1px" android:layout_width="fill_parent" />
+
+    <RelativeLayout android:id="@+id/wind_history_view" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:paddingLeft="3sp" android:paddingRight="3sp" android:paddingBottom="3sp">
+
+        <TextView android:id="@+id/wind_history_title" style="@style/data_title" android:text="@string/wind_history_title"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_min_unit" style="@style/data_label" android:layout_below="@id/wind_history_title"
+            android:layout_alignParentRight="true" android:layout_marginTop="10sp" android:text="@string/kmh_unit"
+            android:gravity="right" android:layout_width="80sp" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_min" style="@style/data_value" android:layout_toLeftOf="@id/wind_history_min_unit"
+            android:layout_alignBaseline="@id/wind_history_min_unit" android:textSize="25sp" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_min_label" style="@style/data_label" android:layout_toLeftOf="@id/wind_history_min"
+            android:layout_alignBaseline="@id/wind_history_min" android:text="@string/wind_history_min_label"
+            android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_average_unit" style="@style/data_label" android:layout_below="@id/wind_history_min_unit"
+            android:layout_alignParentRight="true" android:layout_marginTop="10sp" android:text="@string/kmh_unit"
+            android:gravity="right" android:layout_width="80sp" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_average" style="@style/data_value" android:layout_toLeftOf="@id/wind_history_min_unit"
+            android:layout_alignBaseline="@id/wind_history_average_unit" android:textSize="25sp" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_average_label" style="@style/data_label" android:layout_toLeftOf="@id/wind_history_average"
+            android:layout_alignBaseline="@id/wind_history_average" android:text="@string/wind_history_average_label"
+            android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_max_unit" style="@style/data_label" android:layout_below="@id/wind_history_average_unit"
+            android:layout_alignParentRight="true" android:layout_marginTop="10sp" android:text="@string/kmh_unit"
+            android:gravity="right" android:layout_width="80sp" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_max" style="@style/data_value" android:layout_toLeftOf="@id/wind_history_max_unit"
+            android:layout_alignBaseline="@id/wind_history_max_unit" android:textSize="25sp" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/wind_history_max_label" style="@style/data_label" android:layout_toLeftOf="@id/wind_history_max"
+            android:layout_alignBaseline="@id/wind_history_max" android:text="@string/wind_history_max_label"
+            android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <View android:background="#FFFFFF" android:layout_height="1px" android:layout_width="fill_parent" />
+
+    <RelativeLayout android:id="@+id/air_view" android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:paddingLeft="3sp" android:paddingRight="3sp" android:paddingBottom="3sp">
+
+        <TextView android:id="@+id/air_title" style="@style/data_title" android:text="@string/air_title" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/air_temperature_unit" style="@style/data_label" android:layout_below="@id/air_title"
+            android:layout_alignParentRight="true" android:layout_marginTop="10sp" android:text="@string/temperature_unit"
+            android:gravity="right" android:layout_width="80sp" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/air_temperature" style="@style/data_value" android:layout_toLeftOf="@id/air_temperature_unit"
+            android:layout_alignBaseline="@id/air_temperature_unit" android:textSize="25sp" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/air_temperature_label" style="@style/data_label" android:layout_toLeftOf="@id/air_temperature"
+            android:layout_alignBaseline="@id/air_temperature" android:text="@string/air_temperature_label" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/air_humidity_unit" style="@style/data_label" android:layout_below="@id/air_temperature_unit"
+            android:layout_alignParentRight="true" android:layout_marginTop="10sp" android:text="@string/humidity_unit"
+            android:gravity="right" android:layout_width="80sp" android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/air_humidity" style="@style/data_value" android:layout_toLeftOf="@id/air_humidity_unit"
+            android:layout_alignBaseline="@id/air_humidity_unit" android:textSize="25sp" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/air_humidity_label" style="@style/data_label" android:layout_toLeftOf="@id/air_humidity"
+            android:layout_alignBaseline="@id/air_humidity" android:text="@string/air_humidity_label" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_station_list">Stationsliste</string>
+    <string name="tab_station_map">Standortkarte</string>
+
+    <string name="menu_refresh_title">Aktualisieren</string>
+    <string name="menu_landscape_title">Wind Diagramm</string>
+    <string name="menu_portrait_title">Wetterdaten</string>
+    <string name="menu_preferences_title">Voreinstellungen</string>
+    <string name="menu_about_title">Über uns</string>
+
+    <string name="menu_favorite_add_title">Zu den Favoriten hinzufügen</string>
+    <string name="menu_favorite_remove_title">Aus Favoriten entfernen</string>
+    <string name="menu_map_title">Anzeige auf der Karte</string>
+
+    <string name="loading_text">Laden...</string>
+
+    <string name="altitude_label">Höhe: </string>
+    <string name="meters_text">Meter</string>
+
+    <string name="wind_last_title">Wind</string>
+    <string name="wind_history_title">Wind - letzte stunde</string>
+    <string name="air_title">Luft</string>
+
+    <string name="wind_max_label">Böe</string>
+    <string name="wind_trend_label">Tendenz</string>
+    <string name="wind_history_min_label">Minimum</string>
+    <string name="wind_history_average_label">Durchschnitt</string>
+    <string name="wind_history_max_label">Maximum</string>
+    <string name="air_temperature_label">Temperatur</string>
+    <string name="air_humidity_label">Feuchtigkeit</string>
+
+    <string name="kmh_unit">km/h</string>
+    <string name="temperature_unit">grad</string>
+    <string name="humidity_unit">% relativ</string>
+
+    <string name="server_data_error">Datenfehler</string>
+    <string name="server_database_error">Datenbank fehler</string>
+    <string name="server_unknown_error">Serverfehler</string>
+
+    <string name="data_error">Datenfehler</string>
+    <string name="network_error">Netzwerkfehler</string>
+    <string name="unknown_error">Fehler</string>
+
+    <string name="button_ok">Ok</string>
+    <string name="button_quit">Verlassen</string>
+
+    <string name="chart_yaxis_title">Wind (durchschnitt/Böe)</string>
+
+    <string name="pref_cat_stations">Wetterstationen</string>
+    <string name="pref_operational_station_only_title">Betriebene Stationen</string>
+    <string name="pref_operational_station_only_summary">Zeigt nur die Betriebenen Wetterstationen</string>
+    <string name="pref_cat_map">Karte</string>
+    <string name="pref_map_satellite_title">Satellitenbilder</string>
+    <string name="pref_map_satellite_summary">Satellitenbilder anzeigen</string>
+    <string name="pref_cat_chart">Wind Diagramm</string>
+    <string name="pref_chart_duration_title">Diagramm Dauer</string>
+    <string name="pref_chart_duration_summary">Wählen Sie die Dauer des Diagramms</string>
+
+    <string name="widget_configuration_activity_name">Wählen Sie der Wetterstation</string>
+</resources>

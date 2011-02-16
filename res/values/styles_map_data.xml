@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="map_title">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="map_label">
+        <item name="android:textSize">11sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="map_value">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:maxLines">1</item>
+    </style>
+</resources>

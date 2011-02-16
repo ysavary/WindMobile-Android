@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_refresh" android:title="@string/menu_refresh_title" android:icon="@drawable/ic_menu_refresh" />
+    <item android:id="@+id/menu_orientation" android:title="@string/menu_portrait_title" android:icon="@drawable/ic_menu_always_landscape_portrait" />    
+    <item android:id="@+id/menu_preferences" android:title="@string/menu_preferences_title" android:icon="@drawable/ic_menu_preferences" />
+    <item android:id="@+id/menu_about" android:title="@string/menu_about_title" android:icon="@drawable/ic_menu_info_details" />
+</menu>

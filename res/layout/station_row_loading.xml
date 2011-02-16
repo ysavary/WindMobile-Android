@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal"
+    android:layout_width="fill_parent" android:layout_height="40dp" android:gravity="center_horizontal">
+    <ProgressBar android:layout_height="30dp" android:layout_width="30dp" android:layout_margin="5dp" />
+    <TextView android:text="@string/loading_text" style="@style/list_text" android:layout_width="wrap_content"
+        android:layout_height="fill_parent" android:gravity="center_vertical" android:layout_marginLeft="2dp" />
+</LinearLayout>

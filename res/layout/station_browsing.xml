@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/station_browsing"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <include android:id="@+id/view_0" layout="@layout/station_data" />
+    <include android:id="@+id/view_1" layout="@layout/station_data" />
+</ViewSwitcher>

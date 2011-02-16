@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ai:chart xmlns:ai="http://www.artfulbits.com/android/aiCharts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ai:area>
+        <ai:area.xaxis />
+        <ai:area.yaxis />
+    </ai:area>
+    <ai:series type="SplineArea" name="windAverage" border="#a7a9cb" linewidth="2" />
+    <ai:series type="Spline" name="windMax" color="#e32d2d" linewidth="2" />
+    <ai:legend visible="false" />
+</ai:chart>

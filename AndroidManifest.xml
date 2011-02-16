@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6"
+    android:versionName="1.0" package="ch.windmobile" android:installLocation="auto" android:debuggable="false">
+    <application android:icon="@drawable/windmobile" android:label="@string/app_name" android:name="WindMobile"
+        android:theme="@android:style/Theme.NoTitleBar">
+        <uses-library android:name="com.google.android.maps" />
+
+        <activity android:label="@string/app_name" android:name=".activity.StationTabActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:label="@string/app_name" android:name=".activity.StationListActivity" />
+        <activity android:label="@string/app_name" android:name=".activity.StationBrowsingActivity" />
+        <activity android:label="@string/app_name" android:name=".activity.StationMapActivity" />
+        <activity android:label="@string/app_name" android:name=".activity.PreferencesActivity" />
+        <activity android:label="@string/widget_configuration_activity_name" android:name=".activity.WidgetConfigurationActivity"
+            android:theme="@android:style/Theme.Dialog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="WidgetProvider" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_provider" />
+        </receiver>
+
+        <service android:name=".WidgetProvider$UpdateService" />
+    </application>
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="8" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+</manifest> 
