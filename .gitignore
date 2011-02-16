@@ -16,3 +16,6 @@ target
 .classpath
 
 # project specific
+assets
+bin
+gen
