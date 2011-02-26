@@ -6,8 +6,8 @@
         <item>E</item>
         <item>SE</item>
         <item>S</item>
-        <item>SO</item>
-        <item>O</item>
-        <item>NO</item>
+        <item>SW</item>
+        <item>W</item>
+        <item>NW</item>
     </string-array>
 </resources>

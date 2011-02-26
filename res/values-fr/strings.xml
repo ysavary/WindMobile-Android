@@ -31,8 +31,8 @@
     <string name="air_humidity_label">Humidité</string>
 
     <string name="kmh_unit">km/h</string>
-    <string name="temperature_unit">degré</string>
-    <string name="humidity_unit">% relatif</string>
+    <string name="temperature_unit">°C</string>
+    <string name="humidity_unit">% rel</string>
 
     <string name="server_data_error">Donnée invalide</string>
     <string name="server_database_error">Erreur base de donnée</string>
