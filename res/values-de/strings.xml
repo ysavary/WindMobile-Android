@@ -19,7 +19,7 @@
     <string name="meters_text">Meter</string>
 
     <string name="wind_last_title">Wind</string>
-    <string name="wind_history_title">Wind - letzte stunde</string>
+    <string name="wind_history_title">Wind - letzte Stunde</string>
     <string name="air_title">Luft</string>
 
     <string name="wind_max_label">Böe</string>
