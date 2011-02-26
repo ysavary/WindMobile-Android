@@ -1,27 +1,25 @@
 package ch.windmobile.view;
 
-import ch.windmobile.WindMobile;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+import ch.windmobile.R;
 
 public class TrendIcon extends View {
-    private static final int arrowLenghtDp = 6;
-    private static final int arrowHeightDp = 3;
-
     private final float density = getContext().getResources().getDisplayMetrics().density;
-    private final float arrowLenght = WindMobile.toPixel(arrowLenghtDp, density);
-    private final float arrowHeight = WindMobile.toPixel(arrowHeightDp, density);
 
     private float angle = 0;
     private float drawWidth;
     private float drawHeight;
-    private Paint linePaint;
+    private Paint paint;
+    private Bitmap arrow;
+    float arrowWidth;
+    float arrowHeight;
 
     public TrendIcon(Context context) {
         super(context);
@@ -49,10 +47,11 @@ public class TrendIcon extends View {
     }
 
     private void initialize() {
-        linePaint = new Paint();
-        linePaint.setColor(Color.WHITE);
-        linePaint.setStrokeWidth(1);
-        linePaint.setAntiAlias(true);
+        paint = new Paint();
+        paint.setFilterBitmap(true);
+        arrow = BitmapFactory.decodeResource(getResources(), R.drawable.arrow);
+        arrowWidth = arrow.getWidth();
+        arrowHeight = arrow.getHeight();
     }
 
     private void initializeViewForLayout() {
@@ -65,23 +64,14 @@ public class TrendIcon extends View {
         if (angle != -1) {
             initializeViewForLayout();
 
-            Path arrow = new Path();
-            arrow.moveTo(0, -1);
-            arrow.lineTo(drawWidth - arrowLenght, -1);
-            arrow.lineTo(drawWidth - arrowLenght, -arrowHeight);
-            arrow.lineTo(drawWidth, 0);
-            arrow.lineTo(drawWidth - arrowLenght, arrowHeight);
-            arrow.lineTo(drawWidth - arrowLenght, 1);
-            arrow.lineTo(0, 1);
-            arrow.lineTo(0, -1);
+            // Fix "visible" size of the arrow to 22dp
+            float scale = 22 * density / arrowWidth;
 
             Matrix matrix = new Matrix();
-            matrix.postTranslate(-drawWidth / 2f, 0);
-            matrix.postRotate(-getAngle());
-            matrix.postTranslate(getPaddingLeft() + drawWidth / 2f, getPaddingTop() + drawHeight / 2f);
-            arrow.transform(matrix);
-
-            canvas.drawPath(arrow, linePaint);
+            matrix.postRotate(-angle, arrowWidth / 2f, arrowHeight / 2f);
+            matrix.postScale(scale, scale);
+            matrix.postTranslate(getPaddingLeft() + (drawWidth - arrowWidth * scale) / 2f, getPaddingTop() + (drawHeight - arrowHeight * scale) / 2f);
+            canvas.drawBitmap(arrow, matrix, paint);
         }
     }
 }
