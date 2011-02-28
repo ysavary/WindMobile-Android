@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Wind Mobile</string>
-    <string name="app_url">http://la-haut.info/windmobile</string>
+    <string name="app_url">la-haut.info/windmobile-android</string>
 
     <string name="tab_station_list">Stations list</string>
     <string name="tab_station_map">Stations map</string>
