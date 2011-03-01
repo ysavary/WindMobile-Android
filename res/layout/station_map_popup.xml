@@ -50,7 +50,7 @@
 
             <ch.windmobile.view.TrendIcon android:id="@+id/wind_trend"
                 android:layout_toLeftOf="@id/wind_last_max" android:layout_alignBottom="@id/wind_last_max_unit"
-                android:layout_width="20sp" android:layout_height="20sp" />
+                android:layout_width="20sp" android:layout_height="20sp" android:padding="2dp" />
 
             <TextView android:id="@+id/wind_last_max_label" style="@style/map_label" android:layout_toLeftOf="@id/wind_trend"
                 android:layout_alignBaseline="@id/wind_last_max_unit" android:text="@string/wind_max_label"

@@ -20,6 +20,7 @@
 
     <string name="altitude_label">Altitude:</string>
     <string name="meters_text">meters</string>
+    <string name="meters_short_text">m</string>
 
     <string name="wind_last_title">Wind</string>
     <string name="wind_history_title">Wind - last hour</string>

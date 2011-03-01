@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal"
     android:layout_width="fill_parent" android:layout_height="45dp">
+    <ImageView android:id="@+id/row_maintenance_status" android:focusable="false" android:layout_width="wrap_content"
+        android:layout_height="fill_parent" android:layout_alignParentLeft="true" android:gravity="center_vertical"
+        android:paddingLeft="5dp" android:paddingRight="5sp" />
     <TextView android:id="@+id/row_altitude" style="@style/list_text" android:layout_alignParentRight="true"
         android:layout_width="wrap_content" android:layout_height="fill_parent" android:gravity="center_vertical"
         android:paddingRight="5sp" />
     <TextView android:id="@+id/row_name" style="@style/list_text" android:layout_width="fill_parent"
-        android:layout_height="fill_parent" android:layout_toRightOf="@+id/row_favorite" android:gravity="center_vertical"
-        android:paddingLeft="5dp" android:paddingRight="5sp" />
+        android:layout_height="fill_parent" android:layout_toRightOf="@id/row_maintenance_status" android:gravity="center_vertical"
+        android:paddingRight="5sp" />
 </RelativeLayout>

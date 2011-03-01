@@ -11,7 +11,6 @@ import android.view.View;
 import ch.windmobile.R;
 
 public class TrendIcon extends View {
-    private final float density = getContext().getResources().getDisplayMetrics().density;
 
     private float angle = 0;
     private float drawWidth;
@@ -64,8 +63,7 @@ public class TrendIcon extends View {
         if (angle != -1) {
             initializeViewForLayout();
 
-            // Fix "visible" size of the arrow to 22dp
-            float scale = 22 * density / arrowWidth;
+            float scale = drawWidth / arrowWidth;
 
             Matrix matrix = new Matrix();
             matrix.postRotate(-angle, arrowWidth / 2f, arrowHeight / 2f);

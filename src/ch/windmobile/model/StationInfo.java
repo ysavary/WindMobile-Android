@@ -1,14 +1,17 @@
 package ch.windmobile.model;
 
 public class StationInfo {
+    public static String STATUS_GREEN = "green";
+    public static String STATUS_ORANGE = "orange";
+    public static String STATUS_RED = "red";
 
     private String id;
     private String shortName;
     private String name;
-    private long dataValidity;
     private String altitude;
     private int latitude;
     private int longitude;
+    private String maintenanceStatus;
 
     private boolean favorite;
 
@@ -36,14 +39,6 @@ public class StationInfo {
         this.name = name;
     }
 
-    public long getDataValidity() {
-        return dataValidity;
-    }
-
-    public void setDataValidity(long dataValidity) {
-        this.dataValidity = dataValidity;
-    }
-
     public String getAltitude() {
         return altitude;
     }
@@ -66,6 +61,14 @@ public class StationInfo {
 
     public void setLongitude(int longitude) {
         this.longitude = longitude;
+    }
+
+    public String getMaintenanceStatus() {
+        return maintenanceStatus;
+    }
+
+    public void setMaintenanceStatus(String maintenanceStatus) {
+        this.maintenanceStatus = maintenanceStatus;
     }
 
     public boolean isFavorite() {

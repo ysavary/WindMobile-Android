@@ -6,6 +6,7 @@ public class StationData {
 
     private Date lastUpdate;
     private Date lastDemand;
+    private Date expirationDate;
     private String status;
     private String windAverage;
     private String windMax;
@@ -31,6 +32,14 @@ public class StationData {
 
     public void setLastDemand(Date lastDemand) {
         this.lastDemand = lastDemand;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public String getStatus() {

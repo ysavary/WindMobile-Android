@@ -42,6 +42,10 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
     final PopupWindow popupWindow;
     final String[] directionLabels;
 
+    final Drawable greenIcon;
+    final Drawable yellowIcon;
+    final Drawable redIcon;
+
     String currentStationId;
 
     static Drawable boundIcon(Drawable icon) {
@@ -53,7 +57,11 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
     }
 
     public StationOverlay(StationMapActivity activity, MapView mapView) {
-        super(boundIcon(activity.getResources().getDrawable(R.drawable.windmobile)));
+        super(null);
+
+        greenIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile_green));
+        yellowIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile_yellow));
+        redIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile));
 
         this.activity = activity;
         this.mapView = mapView;
@@ -82,7 +90,16 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
     protected OverlayItem createItem(int i) {
         StationInfo stationInfo = getStationInfos().get(i);
         GeoPoint point = new GeoPoint(stationInfo.getLatitude(), stationInfo.getLongitude());
-        return new OverlayItem(point, stationInfo.getName(), stationInfo.getName());
+
+        OverlayItem overlayItem;
+        if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
+            overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), redIcon);
+        } else if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
+            overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), yellowIcon);
+        } else {
+            overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), greenIcon);
+        }
+        return overlayItem;
     }
 
     @Override
@@ -115,7 +132,7 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
         stationName.setText(stationInfo.getShortName());
 
         StationData stationData = activity.getClientFactory().getStationDataCache(currentStationId);
-        if (activity.getClientFactory().needStationDataUpdate(currentStationId, stationData)) {
+        if (activity.getClientFactory().needStationDataUpdate(stationData)) {
             updateStationData(popupView, null);
             updateStatus(popupView, true, null);
             new WaitForStationDatas().execute(popupView, currentStationId);
@@ -234,6 +251,21 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
             }
         } catch (Exception e) {
             Log.e("StationOverlay", "updateStationData()", e);
+        }
+    }
+
+    class IconItem extends OverlayItem {
+        Drawable marker;
+
+        IconItem(GeoPoint pt, String name, String snippet, Drawable marker) {
+            super(pt, name, snippet);
+            this.marker = marker;
+        }
+
+        @Override
+        public Drawable getMarker(int stateBitset) {
+            setState(marker, stateBitset);
+            return marker;
         }
     }
 }

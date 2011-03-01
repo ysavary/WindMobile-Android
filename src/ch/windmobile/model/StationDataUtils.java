@@ -16,9 +16,9 @@ public class StationDataUtils {
     public static LastUpdate getRelativeLastUpdate(StationData stationData) {
         LastUpdate lastUpdate = new LastUpdate();
 
-        if (stationData.getStatus().equalsIgnoreCase("red")) {
+        if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
             lastUpdate.color = Color.RED;
-        } else if (stationData.getStatus().equalsIgnoreCase("orange")) {
+        } else if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
             lastUpdate.color = Color.YELLOW;
         } else {
             lastUpdate.color = Color.WHITE;
@@ -33,9 +33,9 @@ public class StationDataUtils {
     public static LastUpdate getAbsoluteLastUpdate(StationData stationData) {
         LastUpdate lastUpdate = new LastUpdate();
 
-        if (stationData.getStatus().equalsIgnoreCase("red")) {
+        if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
             lastUpdate.color = Color.RED;
-        } else if (stationData.getStatus().equalsIgnoreCase("orange")) {
+        } else if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
             lastUpdate.color = Color.YELLOW;
         } else {
             lastUpdate.color = Color.WHITE;

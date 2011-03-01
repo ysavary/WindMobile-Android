@@ -246,7 +246,7 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
         StationInfo stationInfo = getClientFactory().getStationInfoCache(stationId);
         StationData stationData = getClientFactory().getStationDataCache(stationId);
 
-        if ((forceUpdate) || (getClientFactory().needStationDataUpdate(stationId, stationData))) {
+        if ((forceUpdate) || (getClientFactory().needStationDataUpdate(stationData))) {
             updateStationData(view, stationData);
             // Set loading text
             updateStatus(view, true, null);

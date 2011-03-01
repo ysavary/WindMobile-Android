@@ -64,15 +64,14 @@ public class ClientFactory {
         stationInfo.setId(stationInfoJson.getString("@id"));
         stationInfo.setShortName(stationInfoJson.getString("@shortName"));
         stationInfo.setName(stationInfoJson.getString("@name"));
-        long validity = stationInfoJson.getLong("@dataValidity") * 1000;
-        stationInfo.setDataValidity(validity);
         stationInfo.setAltitude(stationInfoJson.getString("@altitude"));
 
         double latitude = stationInfoJson.getDouble("@wgs84Latitude");
         double longitude = stationInfoJson.getDouble("@wgs84Longitude");
         stationInfo.setLatitude((int) (latitude * 1E6));
         stationInfo.setLongitude((int) (longitude * 1E6));
-
+        
+        stationInfo.setMaintenanceStatus(stationInfoJson.getString("@maintenanceStatus"));
         stationInfo.setFavorite(WindMobile.readFavoriteStationIds(context).contains(stationInfo.getId()));
 
         return stationInfo;
@@ -122,15 +121,12 @@ public class ClientFactory {
         return Collections.unmodifiableList(list);
     }
 
-    public boolean needStationDataUpdate(String stationId, StationData stationData) {
+    public boolean needStationDataUpdate(StationData stationData) {
         if (stationData == null) {
             return true;
         }
 
-        StationInfo stationInfo = stationInfosCache.get(stationId);
-        Date lastUpdate = stationData.getLastUpdate();
-        long dataValidity = stationInfo.getDataValidity();
-        Date expirationDate = new Date(lastUpdate.getTime() + dataValidity);
+        Date expirationDate = stationData.getExpirationDate();
         Date now = new Date();
         boolean expired = (now.after(expirationDate));
         if (expired) {
@@ -140,7 +136,7 @@ public class ClientFactory {
             // We already asked the new data after the expiration date, wait
             // some time before a new demand
             long waitedTime = now.getTime() - stationData.getLastDemand().getTime();
-            if (stationData.getStatus().equalsIgnoreCase("red")) {
+            if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
                 if (waitedTime >= RED_STATUS_WAITING_TIME) {
                     return true;
                 }
@@ -172,6 +168,8 @@ public class ClientFactory {
         StationData stationData = new StationData();
         Date lastUpdate = dateTimeFormat.parse(stationDataJson.getString("@lastUpdate"));
         stationData.setLastUpdate(lastUpdate);
+        Date expirationDate = dateTimeFormat.parse(stationDataJson.getString("@expirationDate"));
+        stationData.setExpirationDate(expirationDate);
         stationData.setStatus(stationDataJson.getString("@status"));
 
         stationData.setWindAverage(stationDataJson.getString("windAverage"));

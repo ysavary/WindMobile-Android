@@ -10,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.TextView;
-import ch.windmobile.R;
 import ch.windmobile.model.StationInfo;
 
 public class StationInfoListAdapter extends BaseAdapter {
@@ -67,11 +67,20 @@ public class StationInfoListAdapter extends BaseAdapter {
     }
 
     private void bindView(int position, View view, boolean isLandscape) {
-        final CheckBox favorite = (CheckBox) view.findViewById(R.id.row_favorite);
+        final ImageView status = (ImageView) view.findViewById(R.id.row_maintenance_status);
         final TextView name = (TextView) view.findViewById(R.id.row_name);
         final TextView altitude = (TextView) view.findViewById(R.id.row_altitude);
+        final CheckBox favorite = (CheckBox) view.findViewById(R.id.row_favorite);
 
         final StationInfo stationInfo = (StationInfo) getItem(position);
+        if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
+            status.setImageResource(R.drawable.led_red);
+        } else if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
+            status.setImageResource(R.drawable.led_yellow);
+        } else {
+            status.setImageResource(R.drawable.led_green);
+        }
+
         // Optional favorite checkbox
         if (favorite != null) {
             favorite.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -89,6 +98,6 @@ public class StationInfoListAdapter extends BaseAdapter {
         } else {
             name.setText(stationInfo.getShortName());
         }
-        altitude.setText(stationInfo.getAltitude() + " " + context.getText(R.string.meters_text));
+        altitude.setText(stationInfo.getAltitude() + " " + context.getText(R.string.meters_short_text));
     }
 }
