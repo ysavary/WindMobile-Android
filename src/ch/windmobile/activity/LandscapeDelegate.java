@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -13,7 +15,7 @@ import android.view.MotionEvent;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 import ch.windmobile.model.ClientFactory;
-import ch.windmobile.model.ClientFactory.ChartPoint;
+import ch.windmobile.model.ClientFactory.WindChartData;
 import ch.windmobile.model.StationDataUtils;
 import ch.windmobile.model.WindMobileException;
 import ch.windmobile.view.ZoomChartView;
@@ -22,7 +24,7 @@ import com.artfulbits.aiCharts.ChartView;
 import com.artfulbits.aiCharts.Base.ChartArea;
 import com.artfulbits.aiCharts.Base.ChartAxis;
 import com.artfulbits.aiCharts.Base.ChartAxis.Position;
-import com.artfulbits.aiCharts.Base.ChartAxis.ValueType;
+import com.artfulbits.aiCharts.Base.ChartPoint;
 import com.artfulbits.aiCharts.Base.ChartSeries;
 import com.artfulbits.aiCharts.Enums.Alignment;
 
@@ -134,52 +136,73 @@ public class LandscapeDelegate implements ActivityDelegator {
         return Math.floor((value + step) / step) * step;
     }
 
-    void updateChart(List<ChartPoint> chartPoints) {
+    void updateChart(WindChartData windChartData) {
         // remove old points
         windAverageSeries.getPoints().clear();
         windMaxSeries.getPoints().clear();
 
-        int chartDuration = WindMobile.readChartDuration(getActivity());
-        int peakVectorSize;
-        if (chartDuration <= 14400) {
-            peakVectorSize = 3;
-        } else if (chartDuration <= 43200) {
-            peakVectorSize = 5;
-        } else if (chartDuration <= 86400) {
-            peakVectorSize = 7;
-        } else {
-            peakVectorSize = 9;
-        }
-        int margin = (peakVectorSize / 2);
         double maxScale = 0;
-        int nbPoints = chartPoints.size();
-        if (nbPoints > 3) {
-            for (int index = 0; index < chartPoints.size(); index++) {
-                ChartPoint chartPoint = chartPoints.get(index);
 
-                windAverageSeries.getPoints().addDate(chartPoint.date, chartPoint.averageValue);
-                windMaxSeries.getPoints().addDate(chartPoint.date, chartPoint.maxValue);
-
-                maxScale = Math.max(maxScale, chartPoint.maxValue);
-                int startIndex = index - margin;
-                int stopIndex = index + margin;
-
-                if ((startIndex >= 0) && (stopIndex < chartPoints.size()) && (chartPoint.maxValue > 0)) {
-                    List<Double> values = new ArrayList<Double>(peakVectorSize);
-                    for (int i = startIndex; i <= stopIndex; i++) {
-                        values.add(chartPoints.get(i).maxValue);
-                    }
-
-                    if (StationDataUtils.isPeak(values)) {
-                        String direction = StationDataUtils.getWindDirectionLabel(directionLabels, (float) chartPoint.direction);
-                        com.artfulbits.aiCharts.Base.ChartPoint maxPoint = windMaxSeries.getPoints().get(windMaxSeries.getPoints().size() - 1);
-                        maxPoint.setLabel(direction);
-                        maxPoint.setShowLabel(true);
-                    }
+        if (windChartData.windAverage.length() > 3) {
+            try {
+                for (int index = 0; index < windChartData.windAverage.length(); index++) {
+                    long date = windChartData.windAverage.getJSONObject(index).getLong("date");
+                    double averageValue = windChartData.windAverage.getJSONObject(index).getDouble("value");
+                    windAverageSeries.getPoints().addDate(date, averageValue);
                 }
+            } catch (JSONException e) {
+                Log.w("LandscapeDelegate", "Unable to display 'windAverage' chart", e);
             }
+        } else {
+            Log.w("LandscapeDelegate", "Not enough points to display 'windAverage' chart");
+        }
 
-            xAxis.setValueType(ValueType.Date);
+        if (windChartData.windMax.length() > 3) {
+            try {
+                int windMaxLength = windChartData.windMax.length();
+                int windDirectionLength = windChartData.windDirection.length();
+
+                int maxNumberOfLabels = 50;
+                // Round to the near odd number
+                int peakVectorSize = (int) Math.round((double) windMaxLength / maxNumberOfLabels * 2) * 2 - 1;
+                peakVectorSize = Math.max(peakVectorSize, 3);
+                int margin = (peakVectorSize / 2);
+
+                // In case of windDirection.length != windMax.length
+                double windDirectionScale = windDirectionLength / windMaxLength;
+
+                for (int maxIndex = 0; maxIndex < windMaxLength; maxIndex++) {
+                    long date = windChartData.windMax.getJSONObject(maxIndex).getLong("date");
+                    double maxValue = windChartData.windMax.getJSONObject(maxIndex).getDouble("value");
+                    windMaxSeries.getPoints().addDate(date, maxValue);
+
+                    maxScale = Math.max(maxScale, maxValue);
+
+                    // Add windDirection labels
+                    int startIndex = maxIndex - margin;
+                    int stopIndex = maxIndex + margin;
+                    if ((startIndex >= 0) && (stopIndex < windMaxLength) && (maxValue > 0)) {
+                        List<Double> values = new ArrayList<Double>(peakVectorSize);
+                        for (int i = startIndex; i <= stopIndex; i++) {
+                            values.add(windChartData.windMax.getJSONObject(i).getDouble("value"));
+                        }
+
+                        if (StationDataUtils.isPeak(values)) {
+                            int windDirectionIndex = (int) Math.round(maxIndex * windDirectionScale);
+                            double direction = windChartData.windDirection.getJSONObject(windDirectionIndex).getDouble("value");
+                            String label = StationDataUtils.getWindDirectionLabel(directionLabels, (float) direction);
+                            ChartPoint maxPoint = windMaxSeries.getPoints().get(windMaxSeries.getPoints().size() - 1);
+                            maxPoint.setLabel(label);
+                            maxPoint.setShowLabel(true);
+                        }
+                    }
+
+                }
+            } catch (JSONException e) {
+                Log.w("LandscapeDelegate", "Unable to display 'winMax' chart", e);
+            }
+        } else {
+            Log.w("LandscapeDelegate", "Not enough points to display 'winMax' chart");
         }
 
         chartArea.refresh();
@@ -196,7 +219,7 @@ public class LandscapeDelegate implements ActivityDelegator {
         chartView.setZoomFactor(0.5);
     }
 
-    final class WaitForChart extends AsyncTask<Object, Void, List<ChartPoint>> {
+    final class WaitForChart extends AsyncTask<Object, Void, WindChartData> {
         private String stationId;
         private int duration;
         private Exception error;
@@ -207,7 +230,7 @@ public class LandscapeDelegate implements ActivityDelegator {
         }
 
         @Override
-        protected List<ChartPoint> doInBackground(Object... params) {
+        protected WindChartData doInBackground(Object... params) {
             stationId = (String) params[0];
             duration = (Integer) params[1];
             try {
@@ -219,9 +242,9 @@ public class LandscapeDelegate implements ActivityDelegator {
         }
 
         @Override
-        protected void onPostExecute(List<ChartPoint> chartPoints) {
-            if (chartPoints != null) {
-                updateChart(chartPoints);
+        protected void onPostExecute(WindChartData data) {
+            if (data != null) {
+                updateChart(data);
                 getActivity().dismissProgressDialog();
             } else {
                 getActivity().dismissProgressDialog();

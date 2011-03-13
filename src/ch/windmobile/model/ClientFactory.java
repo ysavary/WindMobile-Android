@@ -70,7 +70,7 @@ public class ClientFactory {
         double longitude = stationInfoJson.getDouble("@wgs84Longitude");
         stationInfo.setLatitude((int) (latitude * 1E6));
         stationInfo.setLongitude((int) (longitude * 1E6));
-        
+
         stationInfo.setMaintenanceStatus(stationInfoJson.getString("@maintenanceStatus"));
         stationInfo.setFavorite(WindMobile.readFavoriteStationIds(context).contains(stationInfo.getId()));
 
@@ -198,37 +198,24 @@ public class ClientFactory {
         return stationData;
     }
 
-    public static final class ChartPoint {
-        public long date;
-        public double averageValue;
-        public double maxValue;
-        public double direction;
+    public static final class WindChartData {
+        public JSONArray windAverage;
+        public JSONArray windMax;
+        public JSONArray windDirection;
     }
 
-    public List<ChartPoint> getWindChart(String stationId, int duration) throws IOException, JSONException, WindMobileException {
+    public WindChartData getWindChart(String stationId, int duration) throws IOException, JSONException, WindMobileException {
         String serverUrl = createServerUrl("windchart/" + stationId + "/" + duration);
         JSONObject windChartJson = restClient.get(serverUrl);
 
         JSONArray series = windChartJson.getJSONArray("serie");
-        JSONArray averagePoints = series.getJSONObject(0).getJSONArray("points");
-        JSONArray maxPoints = series.getJSONObject(1).getJSONArray("points");
-        JSONArray directionPoints = series.getJSONObject(2).getJSONArray("points");
 
-        List<ChartPoint> chartPoints = new ArrayList<ChartPoint>();
-        for (int i = 0; i < averagePoints.length(); i++) {
-            long date = averagePoints.getJSONObject(i).getLong("date");
-            double averageValue = averagePoints.getJSONObject(i).getDouble("value");
-            double maxValue = maxPoints.getJSONObject(i).getDouble("value");
-            double directionValue = directionPoints.getJSONObject(i).getDouble("value");
+        WindChartData windChartData = new WindChartData();
+        windChartData.windAverage = series.getJSONObject(0).getJSONArray("points");
+        windChartData.windMax = series.getJSONObject(1).getJSONArray("points");
+        windChartData.windDirection = series.getJSONObject(2).getJSONArray("points");
 
-            ChartPoint chartPoint = new ChartPoint();
-            chartPoint.date = date;
-            chartPoint.averageValue = averageValue;
-            chartPoint.maxValue = maxValue;
-            chartPoint.direction = directionValue;
-            chartPoints.add(chartPoint);
-        }
-        return chartPoints;
+        return windChartData;
     }
 
     public String getUrl() {

@@ -84,9 +84,12 @@ public class StationDataUtils {
             if (values.get(i) > maxValue) {
                 maxValue = values.get(i);
                 maxIndex = i;
+
+                if (maxIndex > middleIndex) {
+                    return false;
+                }
             }
         }
-
         return (maxIndex == middleIndex);
     }
 }
