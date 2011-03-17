@@ -157,6 +157,7 @@ public class LandscapeDelegate implements ActivityDelegator {
             Log.w("LandscapeDelegate", "Not enough points to display 'windAverage' chart");
         }
 
+        // Log.i("LandscapeDelegate", "Start wind max chart");
         if (windChartData.windMax.length() > 3) {
             try {
                 int windMaxLength = windChartData.windMax.length();
@@ -179,19 +180,19 @@ public class LandscapeDelegate implements ActivityDelegator {
                     maxScale = Math.max(maxScale, maxValue);
 
                     // Add windDirection labels
-                    int startIndex = maxIndex - margin;
-                    int stopIndex = maxIndex + margin;
-                    if ((startIndex >= 0) && (stopIndex < windMaxLength) && (maxValue > 0)) {
+                    int startIndex = maxIndex - (peakVectorSize - 1);
+                    if ((startIndex >= 0) && (maxValue > 0)) {
                         List<Double> values = new ArrayList<Double>(peakVectorSize);
-                        for (int i = startIndex; i <= stopIndex; i++) {
-                            values.add(windChartData.windMax.getJSONObject(i).getDouble("value"));
+                        for (int i = startIndex; i <= maxIndex; i++) {
+                            values.add(windMaxSeries.getPoints().get(i).getY(0));
                         }
 
                         if (StationDataUtils.isPeak(values)) {
-                            int windDirectionIndex = (int) Math.round(maxIndex * windDirectionScale);
+                            int middleIndex = maxIndex - margin;
+                            int windDirectionIndex = (int) Math.round(middleIndex * windDirectionScale);
                             double direction = windChartData.windDirection.getJSONObject(windDirectionIndex).getDouble("value");
                             String label = StationDataUtils.getWindDirectionLabel(directionLabels, (float) direction);
-                            ChartPoint maxPoint = windMaxSeries.getPoints().get(windMaxSeries.getPoints().size() - 1);
+                            ChartPoint maxPoint = windMaxSeries.getPoints().get(middleIndex);
                             maxPoint.setLabel(label);
                             maxPoint.setShowLabel(true);
                         }
@@ -204,6 +205,7 @@ public class LandscapeDelegate implements ActivityDelegator {
         } else {
             Log.w("LandscapeDelegate", "Not enough points to display 'winMax' chart");
         }
+        // Log.i("LandscapeDelegate", "End wind max chart");
 
         chartArea.refresh();
 

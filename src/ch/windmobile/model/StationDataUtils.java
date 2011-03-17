@@ -77,17 +77,20 @@ public class StationDataUtils {
         }
 
         int middleIndex = size / 2;
+        double middleValue = values.get(middleIndex);
         double maxValue = 0;
         int maxIndex = 0;
 
         for (int i = 0; i < values.size(); i++) {
-            if (values.get(i) > maxValue) {
-                maxValue = values.get(i);
-                maxIndex = i;
+            double currentValue = values.get(i);
+            if (currentValue > middleValue) {
+                return false;
+            }
 
-                if (maxIndex > middleIndex) {
-                    return false;
-                }
+            // Mark the 1st max value only if the chart contains a "flat" max
+            if (currentValue > maxValue) {
+                maxValue = currentValue;
+                maxIndex = i;
             }
         }
         return (maxIndex == middleIndex);
