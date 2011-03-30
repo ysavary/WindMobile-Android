@@ -71,12 +71,7 @@ public class StationDataUtils {
     }
 
     public static boolean isPeak(List<Double> values) {
-        int size = values.size();
-        if ((size == 0) || (size % 2 == 0)) {
-            throw new IllegalArgumentException("Values[] size must be odd");
-        }
-
-        int middleIndex = size / 2;
+        int middleIndex = values.size() / 2;
         double middleValue = values.get(middleIndex);
         double maxValue = 0;
         int maxIndex = 0;
