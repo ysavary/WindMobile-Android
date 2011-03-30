@@ -23,7 +23,7 @@ import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 
 public class ClientFactory {
-    private static final DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private static final DateFormat _dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private static final long RED_STATUS_WAITING_TIME = 15 * 60 * 1000;
     private static final long WAITING_TIME = 1 * 60 * 1000;
 
@@ -166,6 +166,8 @@ public class ClientFactory {
         JSONObject stationDataJson = restClient.get(serverUrl);
 
         StationData stationData = new StationData();
+        // DateFormat are NOT thread safe
+        DateFormat dateTimeFormat = (DateFormat) _dateTimeFormat.clone();
         Date lastUpdate = dateTimeFormat.parse(stationDataJson.getString("@lastUpdate"));
         stationData.setLastUpdate(lastUpdate);
         Date expirationDate = dateTimeFormat.parse(stationDataJson.getString("@expirationDate"));
