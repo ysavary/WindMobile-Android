@@ -1,3 +1,3 @@
 Windverhältnisse in Echtzeit für Gleitschirm Standorte.
 
-Dieses Programm verwendet die infos von den Wetterstationen von JDC (meteo.jdc.ch - 3 vorhanden). Es zeigt die Stärke und Richtung des Windes, Temperatur und Feuchtigkeit der verschiedenen Flug Standorte.
+Dieses Programm verwendet die infos von den Wetterstationen von JDC (meteo.jdc.ch) und Windline (www.windline.ch). Es zeigt die Stärke und Richtung des Windes, Temperatur und Feuchtigkeit der verschiedenen Flug Standorte.
