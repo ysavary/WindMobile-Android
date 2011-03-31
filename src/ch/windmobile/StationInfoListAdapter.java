@@ -76,7 +76,7 @@ public class StationInfoListAdapter extends BaseAdapter {
         if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
             status.setImageResource(R.drawable.led_red);
         } else if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
-            status.setImageResource(R.drawable.led_yellow);
+            status.setImageResource(R.drawable.led_orange);
         } else {
             status.setImageResource(R.drawable.led_green);
         }

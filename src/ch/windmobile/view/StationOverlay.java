@@ -3,7 +3,6 @@ package ch.windmobile.view;
 import java.util.List;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -23,9 +22,9 @@ import ch.windmobile.activity.StationBrowsingActivity;
 import ch.windmobile.activity.StationMapActivity;
 import ch.windmobile.model.StationData;
 import ch.windmobile.model.StationDataUtils;
+import ch.windmobile.model.StationDataUtils.LastUpdate;
 import ch.windmobile.model.StationInfo;
 import ch.windmobile.model.WindMobileException;
-import ch.windmobile.model.StationDataUtils.LastUpdate;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -43,7 +42,7 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
     final String[] directionLabels;
 
     final Drawable greenIcon;
-    final Drawable yellowIcon;
+    final Drawable orangeIcon;
     final Drawable redIcon;
 
     String currentStationId;
@@ -60,7 +59,7 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
         super(null);
 
         greenIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile_green));
-        yellowIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile_yellow));
+        orangeIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile_orange));
         redIcon = boundIcon(activity.getResources().getDrawable(R.drawable.windmobile));
 
         this.activity = activity;
@@ -95,7 +94,7 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
         if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
             overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), redIcon);
         } else if (stationInfo.getMaintenanceStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
-            overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), yellowIcon);
+            overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), orangeIcon);
         } else {
             overlayItem = new IconItem(point, stationInfo.getName(), stationInfo.getName(), greenIcon);
         }
@@ -169,6 +168,26 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
         dismissPopup(true);
     }
 
+    @Override
+    public GeoPoint getCenter() {
+        // Latitude from -80 to 80
+        int minLat = (int) (81 * 1E6);
+        int maxLat = (int) (-81 * 1E6);
+        // Longitude from -180 to 180
+        int minLon = (int) (181 * 1E6);
+        int maxLon = (int) (-181 * 1E6);
+
+        for (int i = 0; i < size(); i++) {
+            OverlayItem item = getItem(i);
+            minLat = Math.min(minLat, item.getPoint().getLatitudeE6());
+            maxLat = Math.max(maxLat, item.getPoint().getLatitudeE6());
+            minLon = Math.min(minLon, item.getPoint().getLongitudeE6());
+            maxLon = Math.max(maxLon, item.getPoint().getLongitudeE6());
+        }
+
+        return new GeoPoint((maxLat + minLat) / 2, (maxLon + minLon) / 2);
+    }
+
     final class WaitForStationDatas extends AsyncTask<Object, Void, StationData> {
         private View view;
         private String stationId;
@@ -208,10 +227,10 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
         TextView stationLastUpdate = (TextView) view.findViewById(R.id.station_lastUpdate);
 
         if (loading) {
-            stationLastUpdate.setTextColor(Color.WHITE);
+            stationLastUpdate.setTextColor(WindMobile.whiteTextColor);
             stationLastUpdate.setText(getActivity().getText(R.string.loading_text));
         } else if (errorText != null) {
-            stationLastUpdate.setTextColor(Color.RED);
+            stationLastUpdate.setTextColor(WindMobile.redTextColor);
             stationLastUpdate.setText(errorText);
         }
     }

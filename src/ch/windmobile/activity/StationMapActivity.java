@@ -27,8 +27,10 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 
 public class StationMapActivity extends MapActivity implements IClientFactoryActivity {
+    private static int selectionZoomLevel = 11;
 
     private ClientFactory clientFactory;
+    private String selectedStationId;
     MapView mapView;
     StationOverlay stationOverlay;
 
@@ -41,14 +43,34 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
         mapView.setBuiltInZoomControls(true);
         mapView.setClickable(true);
 
+        if (savedInstanceState != null) {
+            selectedStationId = savedInstanceState.getString(IClientFactoryActivity.SELECTED_STATION);
+        }
+
         stationOverlay = new StationOverlay(this, mapView);
         mapView.getOverlays().add(stationOverlay);
 
         clientFactory = getWindMobile().getClientFactory();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (getSelectedStationId() != null) {
+            outState.putString(IClientFactoryActivity.SELECTED_STATION, getSelectedStationId());
+        }
+    }
+
     public WindMobile getWindMobile() {
         return (WindMobile) getApplication();
+    }
+
+    public String getSelectedStationId() {
+        return selectedStationId;
+    }
+
+    public void selectStation(String stationId) {
+        this.selectedStationId = stationId;
+        scrollToStation(selectedStationId);
     }
 
     @Override
@@ -71,6 +93,11 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
+
+        case R.id.menu_refresh:
+            selectedStationId = null;
+            fitOverlays();
+            return true;
 
         case R.id.menu_preferences:
             startActivity(new Intent(this, PreferencesActivity.class));
@@ -147,27 +174,37 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
         return new WaitForStationInfos();
     }
 
-    public void setDefaultLocation() {
+    public void scrollToCurrentLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if (location != null) {
             int latitude = (int) (location.getLatitude() * 1E6);
             int longitude = (int) (location.getLongitude() * 1E6);
             GeoPoint point = new GeoPoint(latitude, longitude);
-            mapView.getController().setZoom(10);
+            mapView.getController().setZoom(selectionZoomLevel);
             mapView.getController().setCenter(point);
         }
     }
 
-    public void scrollToStation(String stationId) {
+    protected void scrollToStation(String stationId) {
         StationInfo stationInfo = getClientFactory().getStationInfoCache(stationId);
         GeoPoint point = new GeoPoint(stationInfo.getLatitude(), stationInfo.getLongitude());
-        mapView.getController().setZoom(10);
+        mapView.getController().setZoom(selectionZoomLevel);
         mapView.getController().animateTo(point);
+    }
+
+    public void fitOverlays() {
+        mapView.getController().zoomToSpan(stationOverlay.getLatSpanE6(), stationOverlay.getLonSpanE6());
+        mapView.getController().animateTo(stationOverlay.getCenter());
     }
 
     @Override
     public void setStationInfos(List<StationInfo> stationInfos) {
         stationOverlay.setStationInfos(stationInfos);
+        if (selectedStationId != null) {
+            scrollToStation(selectedStationId);
+        } else {
+            fitOverlays();
+        }
     }
 }

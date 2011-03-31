@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -122,10 +121,10 @@ public class WidgetProvider extends AppWidgetProvider {
             views.setTextViewText(R.id.station_name, stationName);
 
             if (loading) {
-                views.setTextColor(R.id.station_lastUpdate, Color.WHITE);
+                views.setTextColor(R.id.station_lastUpdate, WindMobile.whiteTextColor);
                 views.setTextViewText(R.id.station_lastUpdate, context.getText(R.string.loading_text));
             } else if (errorText != null) {
-                views.setTextColor(R.id.station_lastUpdate, Color.RED);
+                views.setTextColor(R.id.station_lastUpdate, WindMobile.redTextColor);
                 views.setTextViewText(R.id.station_lastUpdate, errorText);
             }
 

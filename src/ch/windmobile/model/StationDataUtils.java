@@ -3,8 +3,8 @@ package ch.windmobile.model;
 import java.text.DateFormat;
 import java.util.List;
 
-import android.graphics.Color;
 import android.text.format.DateUtils;
+import ch.windmobile.WindMobile;
 
 public class StationDataUtils {
 
@@ -17,11 +17,11 @@ public class StationDataUtils {
         LastUpdate lastUpdate = new LastUpdate();
 
         if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
-            lastUpdate.color = Color.RED;
+            lastUpdate.color = WindMobile.redTextColor;
         } else if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
-            lastUpdate.color = Color.YELLOW;
+            lastUpdate.color = WindMobile.orangeTextColor;
         } else {
-            lastUpdate.color = Color.WHITE;
+            lastUpdate.color = WindMobile.whiteTextColor;
         }
 
         CharSequence lastUpdateText = DateUtils.getRelativeTimeSpanString(stationData.getLastUpdate().getTime());
@@ -34,11 +34,11 @@ public class StationDataUtils {
         LastUpdate lastUpdate = new LastUpdate();
 
         if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_RED)) {
-            lastUpdate.color = Color.RED;
+            lastUpdate.color = WindMobile.redTextColor;
         } else if (stationData.getStatus().equalsIgnoreCase(StationInfo.STATUS_ORANGE)) {
-            lastUpdate.color = Color.YELLOW;
+            lastUpdate.color = WindMobile.orangeTextColor;
         } else {
-            lastUpdate.color = Color.WHITE;
+            lastUpdate.color = WindMobile.whiteTextColor;
         }
 
         CharSequence lastUpdateText = DateUtils.formatSameDayTime(stationData.getLastUpdate().getTime(), System.currentTimeMillis(),

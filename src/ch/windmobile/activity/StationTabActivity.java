@@ -24,12 +24,12 @@ public class StationTabActivity extends TabActivity {
         Intent intent;
 
         intent = new Intent(this, StationListActivity.class);
-        spec = tabHost.newTabSpec(listActivityId).setIndicator(res.getText(R.string.tab_station_list), res.getDrawable(R.drawable.ic_tab_list))
+        spec = tabHost.newTabSpec(listActivityId).setIndicator(res.getText(R.string.tab_station_list), res.getDrawable(R.drawable.tab_list))
             .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent(this, StationMapActivity.class);
-        spec = tabHost.newTabSpec(mapActivityId).setIndicator(res.getText(R.string.tab_station_map), res.getDrawable(R.drawable.ic_tab_map))
+        spec = tabHost.newTabSpec(mapActivityId).setIndicator(res.getText(R.string.tab_station_map), res.getDrawable(R.drawable.tab_map))
             .setContent(intent);
         tabHost.addTab(spec);
 
@@ -39,6 +39,6 @@ public class StationTabActivity extends TabActivity {
     public void switchToMap(String stationId) {
         tabHost.setCurrentTab(1);
         StationMapActivity mapActivity = (StationMapActivity) getLocalActivityManager().getActivity(mapActivityId);
-        mapActivity.scrollToStation(stationId);
+        mapActivity.selectStation(stationId);
     }
 }

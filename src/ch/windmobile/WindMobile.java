@@ -22,6 +22,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -31,6 +32,10 @@ import ch.windmobile.model.WindMobileException;
 
 public class WindMobile extends Application {
     public static final int ABOUT_DIALOG_ID = 1;
+
+    public static int whiteTextColor = Color.WHITE;
+    public static int orangeTextColor = Color.parseColor("#FF8040");
+    public static int redTextColor = Color.RED;
 
     private static float density;
     private static String version;

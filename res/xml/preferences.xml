@@ -5,7 +5,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_cat_map">
-        <CheckBoxPreference android:key="mapSatellite" android:defaultValue="true"
+        <CheckBoxPreference android:key="mapSatellite" android:defaultValue="false"
             android:title="@string/pref_map_satellite_title" android:summary="@string/pref_map_satellite_summary" />
     </PreferenceCategory>
 

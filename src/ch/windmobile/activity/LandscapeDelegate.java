@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.json.JSONException;
 
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -74,7 +73,7 @@ public class LandscapeDelegate implements ActivityDelegator {
 
         Paint labelPaint = new Paint();
         labelPaint.setTextSize(labelTextSize);
-        labelPaint.setColor(Color.WHITE);
+        labelPaint.setColor(WindMobile.whiteTextColor);
         labelPaint.setAntiAlias(true);
         windMaxSeries.setMarkerPaint(labelPaint);
         windMaxSeries.setVLabelAlignment(Alignment.Near);

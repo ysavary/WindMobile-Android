@@ -3,7 +3,6 @@ package ch.windmobile.activity;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -299,10 +298,10 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
         TextView stationLastUpdate = (TextView) view.findViewById(R.id.station_lastUpdate);
 
         if (loading) {
-            stationLastUpdate.setTextColor(Color.WHITE);
+            stationLastUpdate.setTextColor(WindMobile.whiteTextColor);
             stationLastUpdate.setText(getActivity().getText(R.string.loading_text));
         } else if (errorText != null) {
-            stationLastUpdate.setTextColor(Color.RED);
+            stationLastUpdate.setTextColor(WindMobile.redTextColor);
             stationLastUpdate.setText(errorText);
         }
     }
