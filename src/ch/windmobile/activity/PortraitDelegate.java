@@ -101,10 +101,6 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
 
     @Override
     public void onResume() {
-        // Don't try to update this view if we are waiting for the station's list
-        if (getClientFactory().needStationInfosUpdate() == false) {
-            updateView();
-        }
     }
 
     boolean swipeEnabled() {
