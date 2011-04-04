@@ -121,7 +121,7 @@ public class WindMobile extends Application {
     }
 
     public static boolean readMapSatellite(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("mapSatellite", true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("mapSatellite", false);
     }
 
     public static int readChartDuration(Context context) {
