@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tab_station_list">Liste des stations</string>
-    <string name="tab_station_map">Carte des stations</string>
+    <string name="tab_station_list">Stations</string>
+    <string name="tab_station_map">Plan</string>
+    <string name="tab_settings">Réglages</string>
 
     <string name="menu_refresh_title">Actualiser</string>
     <string name="menu_landscape_title">Graphique du vent</string>
     <string name="menu_portrait_title">Données météo</string>
-    <string name="menu_preferences_title">Préférences</string>
     <string name="menu_about_title">À propos</string>
 
     <string name="menu_favorite_add_title">Ajouter aux favoris</string>
     <string name="menu_favorite_remove_title">Supprimer des favoris</string>
-    <string name="menu_map_title">Voir sur la carte</string>
+    <string name="menu_map_title">Voir sur le plan</string>
+
+    <string name="menu_chart_duration_title">Durée du graphique</string>
+    <string name="menu_chart_duration_6_hours">6 heures</string>
+    <string name="menu_chart_duration_12_hours">12 heures</string>
+    <string name="menu_chart_duration_1_day">1 jour</string>
+    <string name="menu_chart_duration_2_days">2 jours</string>
 
     <string name="loading_text">Chargement...</string>
 
@@ -34,7 +40,8 @@
     <string name="temperature_unit">°C</string>
     <string name="humidity_unit">% rel</string>
 
-    <string name="server_data_error">Donnée invalide</string>
+    <string name="server_connection_error">Erreur réseau</string>
+    <string name="server_invalid_data">Donnée invalide</string>
     <string name="server_database_error">Erreur base de donnée</string>
     <string name="server_unknown_error">Erreur serveur</string>
 
@@ -47,15 +54,11 @@
 
     <string name="chart_yaxis_title">Vent (moyen/rafale)</string>
 
+    <string name="pref_map_type_title">Type de plan</string>
+    <string name="pref_network_timeout_title">Délai d\'attente réseau</string>
     <string name="pref_cat_stations">Stations météo</string>
-    <string name="pref_operational_station_only_title">Stations opérationelles</string>
+    <string name="pref_operational_station_only_title">Opérationelles uniquement</string>
     <string name="pref_operational_station_only_summary">Affiche uniquement les stations météo opérationelles</string>
-    <string name="pref_cat_map">Carte</string>
-    <string name="pref_map_satellite_title">Images satellites</string>
-    <string name="pref_map_satellite_summary">Afficher les images satellites</string>
-    <string name="pref_cat_chart">Graphique du vent</string>
-    <string name="pref_chart_duration_title">Durée du graphique</string>
-    <string name="pref_chart_duration_summary">Choisir la durée du graphique</string>
 
     <string name="widget_configuration_activity_name">Choisir la station pour le bureau</string>
 </resources>

@@ -1,18 +1,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Wind Mobile (0.9.4)" />
+
+    <ListPreference android:key="mapType" android:title="@string/pref_map_type_title"
+        android:dialogTitle="@string/pref_map_type_title" android:entries="@array/map_type" android:entryValues="@array/map_type_value"
+        android:defaultValue="0" />
+
+    <ListPreference android:key="networkTimeout" android:title="@string/pref_network_timeout_title"
+        android:dialogTitle="@string/pref_network_timeout_title" android:entries="@array/network_timeout"
+        android:entryValues="@array/network_timeout_value" android:defaultValue="20" />
+
     <PreferenceCategory android:title="@string/pref_cat_stations">
         <CheckBoxPreference android:key="operationalStationOnly" android:defaultValue="true"
             android:title="@string/pref_operational_station_only_title" android:summary="@string/pref_operational_station_only_summary" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_cat_map">
-        <CheckBoxPreference android:key="mapSatellite" android:defaultValue="false"
-            android:title="@string/pref_map_satellite_title" android:summary="@string/pref_map_satellite_summary" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_cat_chart">
-        <ListPreference android:key="chartDuration" android:title="@string/pref_chart_duration_title"
-            android:summary="@string/pref_chart_duration_summary" android:dialogTitle="@string/pref_chart_duration_title"
-            android:entries="@array/chart_duration" android:entryValues="@array/chart_duration_value"
-            android:defaultValue="14400" />
     </PreferenceCategory>
 </PreferenceScreen>

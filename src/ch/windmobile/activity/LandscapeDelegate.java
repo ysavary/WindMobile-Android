@@ -10,7 +10,16 @@ import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 import ch.windmobile.model.ClientFactory;
@@ -27,9 +36,12 @@ import com.artfulbits.aiCharts.Base.ChartPoint;
 import com.artfulbits.aiCharts.Base.ChartSeries;
 import com.artfulbits.aiCharts.Enums.Alignment;
 
-public class LandscapeDelegate implements ActivityDelegator {
+public class LandscapeDelegate implements ActivityDelegator, OnClickListener {
     private final StationBrowsingActivity activity;
     private final ClientFactory clientFactory;
+
+    // 6 hours by default
+    int chartDuration = 21600;
 
     ZoomChartView chartView;
     ChartArea chartArea;
@@ -39,6 +51,9 @@ public class LandscapeDelegate implements ActivityDelegator {
     ChartAxis xAxis;
 
     String[] directionLabels;
+
+    ImageView info;
+    PopupWindow chartDurationButton;
 
     public LandscapeDelegate(StationBrowsingActivity activity, ClientFactory clientFactory) {
         this.activity = activity;
@@ -63,9 +78,6 @@ public class LandscapeDelegate implements ActivityDelegator {
         float labelTextSize = getActivity().getWindMobile().toPixel(14);
         float axisTitleSize = getActivity().getWindMobile().toPixel(12);
 
-        chartArea = chartView.getAreas().get(0);
-        chartArea.setPadding((int) getActivity().getWindMobile().toPixel(10), 0, 0, 0);
-
         windAverageSeries = chartView.getSeries().get("windAverage");
         windMaxSeries = chartView.getSeries().get("windMax");
 
@@ -79,6 +91,7 @@ public class LandscapeDelegate implements ActivityDelegator {
         windMaxSeries.setVLabelAlignment(Alignment.Near);
         directionLabels = activity.getResources().getStringArray(R.array.directions);
 
+        chartArea = chartView.getAreas().get(0);
         yAxis = chartArea.getDefaultYAxis();
         StringBuffer title = new StringBuffer();
         title.append(getActivity().getText(R.string.chart_yaxis_title));
@@ -90,8 +103,9 @@ public class LandscapeDelegate implements ActivityDelegator {
         yAxis.setPosition(Position.Right);
 
         xAxis = chartArea.getDefaultXAxis();
+        xAxis.setLabelsMode(ChartAxis.LabelsMode.HybridLabels);
         xAxis.setFormat(new SimpleDateFormat("E HH:mm"));
-        xAxis.setLabelAlignment(Alignment.Far);
+        xAxis.setLabelAlignment(Alignment.Center);
         xAxis.getScale().setMargin(0);
         xAxis.getLabelPaint().setTextSize(labelTextSize);
         // Fix grid line sometime outside the chart area
@@ -100,6 +114,19 @@ public class LandscapeDelegate implements ActivityDelegator {
         // Zoom
         chartView.setPanning(ChartView.PANNING_HORIZONTAL);
         chartView.enableZooming(chartArea);
+
+        // Chart duration selection
+        info = new ImageView(getActivity());
+        info.setImageResource(R.drawable.info);
+        info.setOnClickListener(this);
+        chartDurationButton = new PopupWindow(info, info.getDrawable().getMinimumWidth(), info.getDrawable().getMinimumHeight());
+        getActivity().registerForContextMenu(chartView);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        chartDurationButton.showAtLocation(chartView, Gravity.LEFT | Gravity.TOP, (int) getActivity().getWindMobile().toPixel(20),
+            (int) getActivity().getWindMobile().toPixel(30) + info.getDrawable().getMinimumHeight());
     }
 
     @Override
@@ -115,7 +142,7 @@ public class LandscapeDelegate implements ActivityDelegator {
     public void updateView() {
         try {
             String stationId = getActivity().getController().getCurrentStationId();
-            new WaitForChart().execute(stationId, WindMobile.readChartDuration(getActivity()));
+            new WaitForChart().execute(stationId, chartDuration);
         } catch (Exception e) {
             Log.e("LandscapeDelegate", "updateView()", e);
         }
@@ -129,6 +156,48 @@ public class LandscapeDelegate implements ActivityDelegator {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == info) {
+            getActivity().openContextMenu(chartView);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.chart_duration, menu);
+        menu.setHeaderTitle(R.string.menu_chart_duration_title);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.chart_duration_6_hours:
+            chartDuration = 21600;
+            refreshView();
+            return true;
+
+        case R.id.chart_duration_12_hours:
+            chartDuration = 43200;
+            refreshView();
+            return true;
+
+        case R.id.chart_duration_1_day:
+            chartDuration = 86400;
+            refreshView();
+            return true;
+
+        case R.id.chart_duration_2_days:
+            chartDuration = 172800;
+            refreshView();
+            return true;
+
+        default:
+            return false;
+        }
     }
 
     double round(double value, int step) {
@@ -216,6 +285,14 @@ public class LandscapeDelegate implements ActivityDelegator {
 
         }
         yAxis.getScale().setRange(0, maxScale);
+
+        if (maxScale >= 80) {
+            yAxis.getScale().setInterval(20d);
+        } else if (maxScale >= 20) {
+            yAxis.getScale().setInterval(10d);
+        } else {
+            yAxis.getScale().setInterval(5d);
+        }
 
         chartView.setZoomFactor(0.5);
     }

@@ -81,14 +81,18 @@ public class RestClient {
         } else {
             if (jsonObject != null) {
                 String serverMessage = jsonObject.getString("message");
-                Log.e("WindMobile", "RestClient.get('" + url + "') --> Http status code = '" + httpStatusCode
-                    + "', message = '" + serverMessage + "'");
+                Log.e("WindMobile", "RestClient.get('" + url + "') --> Http status code = '" + httpStatusCode + "', message = '" + serverMessage
+                    + "'");
 
                 int errorCode = jsonObject.getInt("code");
                 CharSequence localizedName;
                 switch (errorCode) {
+                case -4:
+                    localizedName = getContext().getText(R.string.server_connection_error);
+                    break;
+
                 case -3:
-                    localizedName = getContext().getText(R.string.server_data_error);
+                    localizedName = getContext().getText(R.string.server_invalid_data);
                     break;
 
                 case -2:
@@ -101,8 +105,7 @@ public class RestClient {
                 }
                 throw new ServerException(localizedName, serverMessage);
             } else {
-                Log.e("WindMobile", "RestClient.get('" + url + "') --> Http status code = '" + httpStatusCode
-                    + "', no error content");
+                Log.e("WindMobile", "RestClient.get('" + url + "') --> Http status code = '" + httpStatusCode + "', no error content");
                 return null;
             }
         }

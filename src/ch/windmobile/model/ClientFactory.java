@@ -37,7 +37,8 @@ public class ClientFactory {
     public ClientFactory(Context context, String[] urls) {
         this.context = context;
         this.urls = urls;
-        restClient = new RestClient(context);
+        int networkTimeout = WindMobile.readNetworkTimeout(context);
+        restClient = new RestClient(context, networkTimeout * 1000, networkTimeout * 1000);
         restClient.setUserAgent(WindMobile.getUserAgent(context));
     }
 

@@ -9,11 +9,14 @@ import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
+import android.view.ContextMenu.ContextMenuInfo;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 import ch.windmobile.controller.CircularController;
@@ -57,6 +60,12 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
     }
 
     @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        getActivityDelegator().onAttachedToWindow();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (getController().getCurrentStationId() != null) {
             outState.putString(IClientFactoryActivity.SELECTED_STATION, getController().getCurrentStationId());
@@ -88,24 +97,17 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
         return true;
     }
 
-    synchronized private void scheduleDefaultOrientation() {
-        TimerTask orientationTask = getWindMobile().getOrientationTask();
-        if (orientationTask != null) {
-            orientationTask.cancel();
-        }
-        orientationTask = new TimerTask() {
-            @Override
-            public void run() {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                getWindMobile().setOrientationTask(null);
-            }
-        };
-        getWindMobile().getOrientationTimer().schedule(orientationTask, ORIENTATION_CHANGE_DURATION);
-        getWindMobile().setOrientationTask(orientationTask);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+        getActivityDelegator().onCreateContextMenu(menu, view, menuInfo);
     }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (getActivityDelegator().onMenuItemSelected(featureId, item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
         case R.id.menu_refresh:
             getActivityDelegator().refreshView();
@@ -123,6 +125,22 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
         default:
             return super.onMenuItemSelected(featureId, item);
         }
+    }
+
+    synchronized private void scheduleDefaultOrientation() {
+        TimerTask orientationTask = getWindMobile().getOrientationTask();
+        if (orientationTask != null) {
+            orientationTask.cancel();
+        }
+        orientationTask = new TimerTask() {
+            @Override
+            public void run() {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                getWindMobile().setOrientationTask(null);
+            }
+        };
+        getWindMobile().getOrientationTimer().schedule(orientationTask, ORIENTATION_CHANGE_DURATION);
+        getWindMobile().setOrientationTask(orientationTask);
     }
 
     protected void showProgressDialog() {

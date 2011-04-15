@@ -7,10 +7,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -95,6 +98,10 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
     }
 
     @Override
+    public void onAttachedToWindow() {
+    }
+
+    @Override
     public void onPause() {
         dissmissArrows(false);
     }
@@ -162,6 +169,15 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
             showArrows();
             return gestureDetector.onTouchEvent(event);
         }
+        return false;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
         return false;
     }
 

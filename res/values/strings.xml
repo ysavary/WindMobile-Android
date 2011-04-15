@@ -3,18 +3,24 @@
     <string name="app_name">Wind Mobile</string>
     <string name="app_url">la-haut.info/windmobile-android</string>
 
-    <string name="tab_station_list">Stations list</string>
-    <string name="tab_station_map">Stations map</string>
+    <string name="tab_station_list">Stations</string>
+    <string name="tab_station_map">Map</string>
+    <string name="tab_settings">Settings</string>
 
     <string name="menu_refresh_title">Refresh</string>
     <string name="menu_landscape_title">Wind chart</string>
     <string name="menu_portrait_title">Station data</string>
-    <string name="menu_preferences_title">Preferences</string>
     <string name="menu_about_title">About</string>
 
     <string name="menu_favorite_add_title">Add to favorites</string>
     <string name="menu_favorite_remove_title">Remove from favorites</string>
     <string name="menu_map_title">Show on map</string>
+
+    <string name="menu_chart_duration_title">Chart duration</string>
+    <string name="menu_chart_duration_6_hours">6 hours</string>
+    <string name="menu_chart_duration_12_hours">12 hours</string>
+    <string name="menu_chart_duration_1_day">1 day</string>
+    <string name="menu_chart_duration_2_days">2 days</string>
 
     <string name="loading_text">Loading...</string>
 
@@ -38,7 +44,8 @@
     <string name="temperature_unit">°C</string>
     <string name="humidity_unit">% rel</string>
 
-    <string name="server_data_error">Data error</string>
+    <string name="server_connection_error">Network error</string>
+    <string name="server_invalid_data">Data error</string>
     <string name="server_database_error">Database error</string>
     <string name="server_unknown_error">Server error</string>
 
@@ -51,15 +58,11 @@
 
     <string name="chart_yaxis_title">Wind (average/gust)</string>
 
+    <string name="pref_map_type_title">Map type</string>
+    <string name="pref_network_timeout_title">Network timeout</string>
     <string name="pref_cat_stations">Weather stations</string>
-    <string name="pref_operational_station_only_title">Operational stations</string>
+    <string name="pref_operational_station_only_title">Operational only</string>
     <string name="pref_operational_station_only_summary">Display operational weather stations only</string>
-    <string name="pref_cat_map">Map</string>
-    <string name="pref_map_satellite_title">Satellite layer</string>
-    <string name="pref_map_satellite_summary">Display satellite data</string>
-    <string name="pref_cat_chart">Wind chart</string>
-    <string name="pref_chart_duration_title">Chart duration</string>
-    <string name="pref_chart_duration_summary">Select the duration of the chart</string>
 
     <string name="widget_configuration_activity_name">Select your widget station</string>
 </resources>

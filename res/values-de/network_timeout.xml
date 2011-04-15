@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="network_timeout">
+        <item>10 Sekunden</item>
+        <item>20 Sekunden</item>
+        <item>30 Sekunden</item>
+        <item>45 Sekunden</item>
+        <item>60 Sekunden</item>
+    </string-array>
+</resources>

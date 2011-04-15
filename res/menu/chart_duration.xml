@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/chart_duration_6_hours" android:title="@string/menu_chart_duration_6_hours" />
+    <item android:id="@+id/chart_duration_12_hours" android:title="@string/menu_chart_duration_12_hours" />
+    <item android:id="@+id/chart_duration_1_day" android:title="@string/menu_chart_duration_1_day" />
+    <item android:id="@+id/chart_duration_2_days" android:title="@string/menu_chart_duration_2_days" />
+</menu>

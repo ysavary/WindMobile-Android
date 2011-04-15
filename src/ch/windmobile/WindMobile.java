@@ -120,12 +120,31 @@ public class WindMobile extends Application {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("operationalStationOnly", true);
     }
 
-    public static boolean readMapSatellite(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("mapSatellite", false);
+    public static enum MapType {
+        STANDARD(0), SATELLITE(1);
+
+        final int type;
+
+        private MapType(int type) {
+            this.type = type;
+        }
     }
 
-    public static int readChartDuration(Context context) {
-        String value = PreferenceManager.getDefaultSharedPreferences(context).getString("chartDuration", "14400");
+    public static MapType readMapType(Context context) {
+        String value = PreferenceManager.getDefaultSharedPreferences(context).getString("mapType", "0");
+        int mapType = Integer.decode(value);
+        switch (mapType) {
+        case 0:
+            return MapType.STANDARD;
+        case 1:
+            return MapType.SATELLITE;
+        default:
+            return MapType.STANDARD;
+        }
+    }
+
+    public static int readNetworkTimeout(Context context) {
+        String value = PreferenceManager.getDefaultSharedPreferences(context).getString("networkTimeout", "20");
         return Integer.decode(value);
     }
 

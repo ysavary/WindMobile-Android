@@ -2,11 +2,7 @@ package ch.windmobile.activity;
 
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -14,10 +10,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
+import ch.windmobile.WindMobile.MapType;
 import ch.windmobile.model.ClientFactory;
 import ch.windmobile.model.StationInfo;
 import ch.windmobile.view.StationOverlay;
@@ -99,38 +94,8 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
             fitOverlays();
             return true;
 
-        case R.id.menu_preferences:
-            startActivity(new Intent(this, PreferencesActivity.class));
-            return true;
-
-        case R.id.menu_about:
-            showDialog(WindMobile.ABOUT_DIALOG_ID);
-            return true;
-
         default:
             return super.onMenuItemSelected(featureId, item);
-        }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-
-        case WindMobile.ABOUT_DIALOG_ID:
-            Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.menu_about_title);
-            builder.setIcon(R.drawable.windmobile);
-
-            View view = View.inflate(this, R.layout.about, null);
-            TextView messageTextView = (TextView) view.findViewById(R.id.about_message);
-            messageTextView.setText(WindMobile.getName(this) + " " + WindMobile.getVersion(this));
-            builder.setView(view);
-
-            builder.setPositiveButton("Ok", null);
-            return builder.create();
-
-        default:
-            return super.onCreateDialog(id);
         }
     }
 
@@ -138,7 +103,18 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
     protected void onResume() {
         super.onResume();
 
-        mapView.setSatellite(WindMobile.readMapSatellite(this));
+        MapType mapType = WindMobile.readMapType(this);
+        switch (mapType) {
+        case STANDARD:
+            mapView.setSatellite(false);
+            break;
+        case SATELLITE:
+            mapView.setSatellite(true);
+            break;
+
+        default:
+            mapView.setSatellite(false);
+        }
 
         if (getClientFactory().needStationInfosUpdate()) {
             getWaitForStationInfos().execute();

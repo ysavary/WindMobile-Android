@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tab_station_list">Stationsliste</string>
-    <string name="tab_station_map">Standortkarte</string>
+    <string name="tab_station_list">Stationen</string>
+    <string name="tab_station_map">Karte</string>
+    <string name="tab_settings">Einstellungen</string>
 
     <string name="menu_refresh_title">Aktualisieren</string>
     <string name="menu_landscape_title">Wind Diagramm</string>
     <string name="menu_portrait_title">Wetterdaten</string>
-    <string name="menu_preferences_title">Voreinstellungen</string>
     <string name="menu_about_title">Über uns</string>
 
     <string name="menu_favorite_add_title">Zu den Favoriten hinzufügen</string>
     <string name="menu_favorite_remove_title">Aus Favoriten entfernen</string>
     <string name="menu_map_title">Anzeige auf der Karte</string>
+
+    <string name="menu_chart_duration_title">Diagramm Dauer</string>
+    <string name="menu_chart_duration_6_hours">>6 Stunden</string>
+    <string name="menu_chart_duration_12_hours">>12 Stunden</string>
+    <string name="menu_chart_duration_1_day">1 Tag</string>
+    <string name="menu_chart_duration_2_days">1 Tage</string>
 
     <string name="loading_text">Laden...</string>
 
@@ -34,7 +40,8 @@
     <string name="temperature_unit">°C</string>
     <string name="humidity_unit">% rel</string>
 
-    <string name="server_data_error">Datenfehler</string>
+    <string name="server_connection_error">Netzwerkfehler</string>
+    <string name="server_invalid_data">Datenfehler</string>
     <string name="server_database_error">Datenbank fehler</string>
     <string name="server_unknown_error">Serverfehler</string>
 
@@ -47,15 +54,11 @@
 
     <string name="chart_yaxis_title">Wind (durchschnitt/Böe)</string>
 
+    <string name="pref_map_type_title">Kartentyp</string>
+    <string name="pref_network_timeout_title">Netz-Unterbrechung</string>
     <string name="pref_cat_stations">Wetterstationen</string>
-    <string name="pref_operational_station_only_title">Betriebene Stationen</string>
+    <string name="pref_operational_station_only_title">Nur die Betriebenen</string>
     <string name="pref_operational_station_only_summary">Zeigt nur die Betriebenen Wetterstationen</string>
-    <string name="pref_cat_map">Karte</string>
-    <string name="pref_map_satellite_title">Satellitenbilder</string>
-    <string name="pref_map_satellite_summary">Satellitenbilder anzeigen</string>
-    <string name="pref_cat_chart">Wind Diagramm</string>
-    <string name="pref_chart_duration_title">Diagramm Dauer</string>
-    <string name="pref_chart_duration_summary">Wählen Sie die Dauer des Diagramms</string>
 
     <string name="widget_configuration_activity_name">Wählen Sie der Wetterstation</string>
 </resources>

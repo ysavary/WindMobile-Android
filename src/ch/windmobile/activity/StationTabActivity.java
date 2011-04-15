@@ -10,6 +10,7 @@ import ch.windmobile.R;
 public class StationTabActivity extends TabActivity {
     static final String listActivityId = "listActivity";
     static final String mapActivityId = "mapActivity";
+    static final String preferencesActivityId = "preferencesActivity";
 
     TabHost tabHost;
 
@@ -30,6 +31,11 @@ public class StationTabActivity extends TabActivity {
 
         intent = new Intent(this, StationMapActivity.class);
         spec = tabHost.newTabSpec(mapActivityId).setIndicator(res.getText(R.string.tab_station_map), res.getDrawable(R.drawable.tab_map))
+            .setContent(intent);
+        tabHost.addTab(spec);
+
+        intent = new Intent(this, PreferencesActivity.class);
+        spec = tabHost.newTabSpec(preferencesActivityId).setIndicator(res.getText(R.string.tab_settings), res.getDrawable(R.drawable.tab_settings))
             .setContent(intent);
         tabHost.addTab(spec);
 
