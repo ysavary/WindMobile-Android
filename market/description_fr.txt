@@ -1,3 +1,11 @@
+Application name
+----------------
+
+Wind Mobile
+
+Description
+-----------
+
 Permet de consulter en temps réel les conditions aérologiques des sites de vol libre.
 
 Cette application utilise les réseaux de mesure JDC (meteo.jdc.ch) et Windline (www.windline.ch). Elle affiche la force et la direction du vent, la température et l'humidité de l'air des différents sites de vols.
