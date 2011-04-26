@@ -65,4 +65,5 @@
     <string name="pref_operational_station_only_summary">Display operational weather stations only</string>
 
     <string name="widget_configuration_activity_name">Select your widget station</string>
+    <string name="widget_error">Unknown widget</string>
 </resources>

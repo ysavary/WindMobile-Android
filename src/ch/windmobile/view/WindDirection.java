@@ -104,34 +104,37 @@ public class WindDirection extends View {
     }
 
     protected void drawDirections(Canvas canvas) {
-        Paint pointPaint = new Paint();
-        pointPaint.setTextAlign(Align.LEFT);
-        pointPaint.setColor(Color.YELLOW);
-        pointPaint.setStrokeWidth(2);
-        pointPaint.setAntiAlias(true);
+        if (directions != null && (directions.size() > 0)) {
+            Paint pointPaint = new Paint();
+            pointPaint.setTextAlign(Align.LEFT);
+            pointPaint.setColor(Color.YELLOW);
+            pointPaint.setStrokeWidth(2);
+            pointPaint.setAntiAlias(true);
 
-        double radius = 0;
+            double radius = 0;
 
-        // The center
-        float lastX = (float) (getPaddingLeft() + drawWidth / 2.0);
-        float lastY = (float) (getPaddingTop() + drawHeight / 2.0);
+            // The center
+            float lastX = (float) (getPaddingLeft() + drawWidth / 2.0);
+            float lastY = (float) (getPaddingTop() + drawHeight / 2.0);
 
-        for (int i = 0; i < directions.size(); i++) {
-            float direction = directions.get(i);
-            radius = radius + lineRadius / directions.size();
+            for (int i = 0; i < directions.size(); i++) {
+                float direction = directions.get(i);
+                radius = radius + lineRadius / directions.size();
 
-            double pointOffsetX = getPaddingLeft() + (drawWidth - 2.0 * radius) / 2.0;
-            double pointOffsetY = getPaddingTop() + (drawHeight - 2.0 * radius) / 2.0;
+                double pointOffsetX = getPaddingLeft() + (drawWidth - 2.0 * radius) / 2.0;
+                double pointOffsetY = getPaddingTop() + (drawHeight - 2.0 * radius) / 2.0;
 
-            double circleX = Math.cos(getAngleInRadian(direction)) * radius;
-            double circleY = Math.sin(getAngleInRadian(direction)) * radius;
+                double circleX = Math.cos(getAngleInRadian(direction)) * radius;
+                double circleY = Math.sin(getAngleInRadian(direction)) * radius;
 
-            float x = (float) (pointOffsetX + radius - circleX);
-            float y = (float) (pointOffsetY + radius - circleY);
+                float x = (float) (pointOffsetX + radius - circleX);
+                float y = (float) (pointOffsetY + radius - circleY);
 
-            canvas.drawLine(lastX, lastY, x, y, pointPaint);
-            lastX = x;
-            lastY = y;
+                canvas.drawLine(lastX, lastY, x, y, pointPaint);
+                lastX = x;
+                lastY = y;
+            }
+            canvas.drawCircle(lastX, lastY, 4, pointPaint);
         }
     }
 

@@ -177,7 +177,7 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         return false;
     }
 

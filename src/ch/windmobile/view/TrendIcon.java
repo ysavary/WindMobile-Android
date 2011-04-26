@@ -16,7 +16,8 @@ public class TrendIcon extends View {
     private float drawWidth;
     private float drawHeight;
     private Paint paint;
-    private Bitmap arrow;
+    private Bitmap arrowUp;
+    private Bitmap arrowDown;
     float arrowWidth;
     float arrowHeight;
 
@@ -48,9 +49,10 @@ public class TrendIcon extends View {
     private void initialize() {
         paint = new Paint();
         paint.setFilterBitmap(true);
-        arrow = BitmapFactory.decodeResource(getResources(), R.drawable.arrow);
-        arrowWidth = arrow.getWidth();
-        arrowHeight = arrow.getHeight();
+        arrowUp = BitmapFactory.decodeResource(getResources(), R.drawable.arrow_red);
+        arrowDown = BitmapFactory.decodeResource(getResources(), R.drawable.arrow_green);
+        arrowWidth = arrowUp.getWidth();
+        arrowHeight = arrowUp.getHeight();
     }
 
     private void initializeViewForLayout() {
@@ -69,7 +71,11 @@ public class TrendIcon extends View {
             matrix.postRotate(-angle, arrowWidth / 2f, arrowHeight / 2f);
             matrix.postScale(scale, scale);
             matrix.postTranslate(getPaddingLeft() + (drawWidth - arrowWidth * scale) / 2f, getPaddingTop() + (drawHeight - arrowHeight * scale) / 2f);
-            canvas.drawBitmap(arrow, matrix, paint);
+            if (angle > 0) {
+                canvas.drawBitmap(arrowUp, matrix, paint);
+            } else {
+                canvas.drawBitmap(arrowDown, matrix, paint);
+            }
         }
     }
 }

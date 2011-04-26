@@ -16,7 +16,6 @@ import ch.windmobile.model.ClientFactory;
 import ch.windmobile.model.StationData;
 import ch.windmobile.model.StationDataUtils;
 import ch.windmobile.model.StationDataUtils.LastUpdate;
-import ch.windmobile.model.WindMobileException;
 
 public class WidgetProvider extends AppWidgetProvider {
     private static final String WIDGET_ID = "ch.windmobile.widgetId";
@@ -39,6 +38,9 @@ public class WidgetProvider extends AppWidgetProvider {
             }
             if (stationId != null) {
                 updateWidget(context, widgetId);
+            } else {
+                // Mark this widget as orphan
+                updateStatus(context, widgetId, stationId, null, false, context.getResources().getString(R.string.widget_error));
             }
         }
     }
@@ -89,11 +91,13 @@ public class WidgetProvider extends AppWidgetProvider {
                     updateStationData(this, widgetId, stationData);
                     break;
                 } catch (Exception e) {
+                    /* Don't log exception, leave old value
                     WindMobileException clientException = WindMobile.createException(this, e);
                     if (clientException.isFatal() == false) {
                         updateStatus(this, widgetId, stationId, stationName, false, clientException.getLocalizedName());
                         break;
                     }
+                    */
                     retry++;
                     try {
                         Thread.sleep(RETRY_DELAY);

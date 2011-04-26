@@ -10,13 +10,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.ContextMenu.ContextMenuInfo;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 import ch.windmobile.controller.CircularController;
@@ -98,16 +98,7 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-        getActivityDelegator().onCreateContextMenu(menu, view, menuInfo);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (getActivityDelegator().onMenuItemSelected(featureId, item)) {
-            return true;
-        }
-
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_refresh:
             getActivityDelegator().refreshView();
@@ -123,8 +114,21 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
             return true;
 
         default:
-            return super.onMenuItemSelected(featureId, item);
+            return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+        getActivityDelegator().onCreateContextMenu(menu, view, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (getActivityDelegator().onContextItemSelected(item)) {
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     synchronized private void scheduleDefaultOrientation() {

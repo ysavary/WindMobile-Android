@@ -55,6 +55,18 @@ public class StationListActivity extends ClientFactoryActivity implements OnItem
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_refresh:
+            refreshView();
+            return true;
+
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    };
+
     StationInfoListAdapter getListAdapter() {
         return (StationInfoListAdapter) listView.getAdapter();
     }
@@ -74,7 +86,7 @@ public class StationListActivity extends ClientFactoryActivity implements OnItem
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_favorite_add:
             AdapterContextMenuInfo adapterMenuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -94,12 +106,9 @@ public class StationListActivity extends ClientFactoryActivity implements OnItem
             StationTabActivity parentActivity = (StationTabActivity) getParent();
             parentActivity.switchToMap(selectedStationInfo.getId());
             return true;
-        case R.id.menu_refresh:
-            refreshView();
-            return true;
 
         default:
-            return super.onMenuItemSelected(featureId, item);
+            return super.onContextItemSelected(item);
         }
     }
 

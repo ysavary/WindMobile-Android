@@ -29,15 +29,14 @@ public class PreferencesActivity extends PreferenceActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
         case R.id.menu_about:
             showDialog(WindMobile.ABOUT_DIALOG_ID);
             return true;
 
         default:
-            return super.onMenuItemSelected(featureId, item);
+            return super.onOptionsItemSelected(item);
         }
     }
 

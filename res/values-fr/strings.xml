@@ -61,4 +61,5 @@
     <string name="pref_operational_station_only_summary">Affiche uniquement les stations météo opérationelles</string>
 
     <string name="widget_configuration_activity_name">Choisir la station pour le bureau</string>
+    <string name="widget_error">Widget inconnu</string>
 </resources>

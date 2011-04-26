@@ -86,16 +86,15 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
         case R.id.menu_refresh:
             selectedStationId = null;
             fitOverlays();
             return true;
 
         default:
-            return super.onMenuItemSelected(featureId, item);
+            return super.onOptionsItemSelected(item);
         }
     }
 

@@ -37,6 +37,11 @@ import com.artfulbits.aiCharts.Base.ChartSeries;
 import com.artfulbits.aiCharts.Enums.Alignment;
 
 public class LandscapeDelegate implements ActivityDelegator, OnClickListener {
+    public static final int chart_duration_6_hours = 21600;
+    public static final int chart_duration_12_hours = 43200;
+    public static final int chart_duration_1_day = 86400;
+    public static final int chart_duration_2_days = 172800;
+
     private final StationBrowsingActivity activity;
     private final ClientFactory clientFactory;
 
@@ -125,8 +130,8 @@ public class LandscapeDelegate implements ActivityDelegator, OnClickListener {
 
     @Override
     public void onAttachedToWindow() {
-        chartDurationButton.showAtLocation(chartView, Gravity.LEFT | Gravity.TOP, (int) getActivity().getWindMobile().toPixel(20),
-            (int) getActivity().getWindMobile().toPixel(30) + info.getDrawable().getMinimumHeight());
+        chartDurationButton.showAtLocation(chartView, Gravity.LEFT | Gravity.TOP, (int) getActivity().getWindMobile().toPixel(10),
+            (int) getActivity().getWindMobile().toPixel(5) + info.getDrawable().getMinimumHeight());
     }
 
     @Override
@@ -170,29 +175,55 @@ public class LandscapeDelegate implements ActivityDelegator, OnClickListener {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.chart_duration, menu);
         menu.setHeaderTitle(R.string.menu_chart_duration_title);
+
+        // Context menu is not persistent, set the selected chart duration
+        switch (chartDuration) {
+        case chart_duration_6_hours:
+            menu.getItem(0).setChecked(true);
+            break;
+
+        case chart_duration_12_hours:
+            menu.getItem(1).setChecked(true);
+            break;
+
+        case chart_duration_1_day:
+            menu.getItem(2).setChecked(true);
+            break;
+
+        case chart_duration_2_days:
+            menu.getItem(3).setChecked(true);
+        }
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.chart_duration_6_hours:
-            chartDuration = 21600;
-            refreshView();
+            if (chartDuration != chart_duration_6_hours) {
+                chartDuration = chart_duration_6_hours;
+                refreshView();
+            }
             return true;
 
         case R.id.chart_duration_12_hours:
-            chartDuration = 43200;
-            refreshView();
+            if (chartDuration != chart_duration_12_hours) {
+                chartDuration = chart_duration_12_hours;
+                refreshView();
+            }
             return true;
 
         case R.id.chart_duration_1_day:
-            chartDuration = 86400;
-            refreshView();
+            if (chartDuration != chart_duration_1_day) {
+                chartDuration = chart_duration_1_day;
+                refreshView();
+            }
             return true;
 
         case R.id.chart_duration_2_days:
-            chartDuration = 172800;
-            refreshView();
+            if (chartDuration != chart_duration_2_days) {
+                chartDuration = chart_duration_2_days;
+                refreshView();
+            }
             return true;
 
         default:

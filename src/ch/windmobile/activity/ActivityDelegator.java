@@ -22,5 +22,5 @@ public interface ActivityDelegator {
     
     public boolean onTouchEvent(MotionEvent event);
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo);
-    public boolean onMenuItemSelected(int featureId, MenuItem item);
+    public boolean onContextItemSelected(MenuItem item);
 }
