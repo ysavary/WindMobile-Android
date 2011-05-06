@@ -13,11 +13,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
@@ -219,6 +221,62 @@ public class ClientFactory {
         windChartData.windDirection = series.getJSONObject(2).getJSONArray("points");
 
         return windChartData;
+    }
+
+    private String createMessage(JSONObject messageJson) throws ParseException, JSONException {
+        final DateFormat dateTimeFormat = new SimpleDateFormat("HH:mm:ss");
+        String result = "";
+
+        Date date = _dateTimeFormat.parse(messageJson.getString("date"));
+        result += dateTimeFormat.format(date);
+        result += " (" + messageJson.getString("pseudo") + ") : ";
+        result += messageJson.getString("text");
+
+        return result;
+    }
+
+    public String getLastMessages() throws ServerException, ClientProtocolException, IOException, JSONException {
+        final String chatRoomId = "test";
+
+        String serverUrl = createServerUrl("chatrooms/" + chatRoomId + "/lastmessages/" + 5);
+        JSONObject messagesJson;
+        try {
+            messagesJson = restClient.get(serverUrl);
+        } catch (JSONException e) {
+            return "";
+        }
+
+        String result = "";
+        JSONArray messageListJson = messagesJson.optJSONArray("message");
+        if (messageListJson != null) {
+            for (int i = 0; i < messageListJson.length(); i++) {
+                try {
+                    result += createMessage(messageListJson.getJSONObject(i)) + "\n";
+                } catch (Exception e) {
+                    Log.e("WindMobile", "ClientFactory() --> Ignored message", e);
+                }
+            }
+        } else {
+            JSONObject messageJson = messagesJson.optJSONObject("message");
+            if (messageJson != null) {
+                try {
+                    result += createMessage(messageJson) + "\n";
+                } catch (ParseException e) {
+                    Log.e("WindMobile", "ClientFactory() --> Ignored message", e);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public void postMessage(String message) throws ServerException, ClientProtocolException, IOException, JSONException {
+        final String chatRoomId = "test";
+        final String username = PreferenceManager.getDefaultSharedPreferences(context).getString("username", "");
+        final String password = PreferenceManager.getDefaultSharedPreferences(context).getString("password", "");
+
+        String serverUrl = createServerUrl("chatrooms/" + chatRoomId + "/postmessage");
+        restClient.post(serverUrl, message, username, password);
     }
 
     public String getUrl() {

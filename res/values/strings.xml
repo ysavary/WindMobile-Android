@@ -63,6 +63,11 @@
     <string name="pref_cat_stations">Weather stations</string>
     <string name="pref_operational_station_only_title">Operational only</string>
     <string name="pref_operational_station_only_summary">Display operational weather stations only</string>
+    <string name="pref_cat_user">Credentials</string>
+    <string name="pref_username_title">Email</string>
+    <string name="pref_username_summary">Your email for social tab</string>
+    <string name="pref_password_title">Password</string>
+    <string name="pref_password_summary">Your password for social tab</string>
 
     <string name="widget_configuration_activity_name">Select your widget station</string>
     <string name="widget_error">Unknown widget</string>

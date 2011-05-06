@@ -13,4 +13,11 @@
         <CheckBoxPreference android:key="operationalStationOnly" android:defaultValue="true"
             android:title="@string/pref_operational_station_only_title" android:summary="@string/pref_operational_station_only_summary" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_cat_user">
+        <EditTextPreference android:key="username" android:title="@string/pref_username_title"
+            android:summary="@string/pref_username_summary" />
+        <EditTextPreference android:key="password" android:password="true" android:title="@string/pref_password_title"
+            android:summary="@string/pref_password_summary" />
+    </PreferenceCategory>
 </PreferenceScreen>

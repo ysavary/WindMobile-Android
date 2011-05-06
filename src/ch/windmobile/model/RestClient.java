@@ -11,6 +11,8 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -20,6 +22,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
+import ch.windmobile.Base64;
 import ch.windmobile.R;
 
 public class RestClient {
@@ -60,6 +63,84 @@ public class RestClient {
 
         // Execute the request
         HttpResponse response = httpClient.execute(httpGet);
+
+        // Get hold of the response entity
+        HttpEntity entity = response.getEntity();
+
+        JSONObject jsonObject = null;
+
+        // If the response does not enclose an entity, there is no need
+        // to worry about connection release
+        if (entity != null) {
+            InputStream inStream = entity.getContent();
+            String result = convertStreamToString(inStream);
+
+            jsonObject = new JSONObject(result);
+        }
+
+        int httpStatusCode = response.getStatusLine().getStatusCode();
+        if (httpStatusCode == HttpStatus.SC_OK) {
+            return jsonObject;
+        } else {
+            if (jsonObject != null) {
+                String serverMessage = jsonObject.getString("message");
+                Log.e("WindMobile", "RestClient.get('" + url + "') --> Http status code = '" + httpStatusCode + "', message = '" + serverMessage
+                    + "'");
+
+                int errorCode = jsonObject.getInt("code");
+                CharSequence localizedName;
+                switch (errorCode) {
+                case -4:
+                    localizedName = getContext().getText(R.string.server_connection_error);
+                    break;
+
+                case -3:
+                    localizedName = getContext().getText(R.string.server_invalid_data);
+                    break;
+
+                case -2:
+                    localizedName = getContext().getText(R.string.server_database_error);
+                    break;
+
+                default:
+                    localizedName = getContext().getText(R.string.server_unknown_error);
+                    break;
+                }
+                throw new ServerException(localizedName, serverMessage);
+            } else {
+                Log.e("WindMobile", "RestClient.get('" + url + "') --> Http status code = '" + httpStatusCode + "', no error content");
+                return null;
+            }
+        }
+    }
+
+    public JSONObject post(String url, String content, String username, String password) throws ServerException, ClientProtocolException,
+        IOException, JSONException {
+        HttpParams httpParameters = new BasicHttpParams();
+        // Set connection timeout and socket timeout
+        HttpConnectionParams.setConnectionTimeout(httpParameters, getConnectionTimeout());
+        HttpConnectionParams.setSoTimeout(httpParameters, getSocketTimeout());
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+
+        // Prepare a request object
+        HttpPost httpPost = new HttpPost(url);
+
+        // Authentication
+        if ((username != null) && (username.equals("") == false) && (password != null)) {
+            httpPost.setHeader("Authorization", "Basic " + Base64.encodeBytes((username + ":" + password).getBytes()));
+        }
+
+        if (getUserAgent() != null) {
+            httpPost.setHeader("User-Agent", getUserAgent());
+        }
+        // Ask for JSON
+        httpPost.setHeader("Accept", "application/json");
+
+        // Put content
+        httpPost.setEntity(new StringEntity(content));
+
+        // Execute the request
+        HttpResponse response = httpClient.execute(httpPost);
 
         // Get hold of the response entity
         HttpEntity entity = response.getEntity();

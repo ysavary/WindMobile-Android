@@ -14,6 +14,7 @@
         <activity android:label="@string/app_name" android:name=".activity.StationListActivity" />
         <activity android:label="@string/app_name" android:name=".activity.StationBrowsingActivity" />
         <activity android:label="@string/app_name" android:name=".activity.StationMapActivity" />
+        <activity android:label="@string/app_name" android:name=".activity.SocialActivity" />
         <activity android:label="@string/app_name" android:name=".activity.PreferencesActivity" />
         <activity android:label="@string/widget_configuration_activity_name" android:name=".activity.WidgetConfigurationActivity"
             android:theme="@android:style/Theme.Dialog">
