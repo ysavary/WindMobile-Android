@@ -23,7 +23,7 @@ import ch.windmobile.controller.CircularController;
 import ch.windmobile.model.StationInfo;
 import ch.windmobile.model.WindMobileException;
 
-public class StationBrowsingActivity extends ClientFactoryActivity {
+public class StationBrowsingActivity extends StationInfosActivity {
     private static final int ORIENTATION_CHANGE_DURATION = 7000;
 
     private ActivityDelegator activityDelegator;
@@ -39,10 +39,10 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
         controller = new CircularController();
         String currentStationId = null;
         if (savedInstanceState != null) {
-            currentStationId = savedInstanceState.getString(IClientFactoryActivity.SELECTED_STATION);
+            currentStationId = savedInstanceState.getString(StationInfosActivity.SELECTED_STATION);
         }
         if (currentStationId == null) {
-            currentStationId = getIntent().getStringExtra(IClientFactoryActivity.SELECTED_STATION);
+            currentStationId = getIntent().getStringExtra(StationInfosActivity.SELECTED_STATION);
         }
         if (currentStationId != null) {
             controller.setCurrentStationId(currentStationId);
@@ -68,7 +68,7 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (getController().getCurrentStationId() != null) {
-            outState.putString(IClientFactoryActivity.SELECTED_STATION, getController().getCurrentStationId());
+            outState.putString(StationInfosActivity.SELECTED_STATION, getController().getCurrentStationId());
         } else {
             Log.i("StationBrowsingActivity", "onSaveInstanceState() --> current selection is null");
         }
@@ -182,7 +182,7 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
         return activityDelegator;
     }
 
-    protected final class WaitForStationInfos extends ClientFactoryActivity.WaitForStationInfos {
+    protected final class WaitForStationInfos extends StationInfosActivity.WaitForStationInfos {
         @Override
         protected void onPreExecute() {
             showProgressDialog();
@@ -210,9 +210,13 @@ public class StationBrowsingActivity extends ClientFactoryActivity {
 
     @Override
     public void setStationInfos(List<StationInfo> stationInfos) {
-        List<String> stationIds = new ArrayList<String>(WindMobile.readFavoriteStationIds(this));
-        if (stationIds.contains(controller.getCurrentStationId()) == false) {
-            stationIds.add(0, controller.getCurrentStationId());
+        List<String> stationIds = new ArrayList<String>();
+
+        stationIds.add(controller.getCurrentStationId());
+        for (StationInfo stationInfo : stationInfos) {
+            if (stationInfo.isFavorite()) {
+                stationIds.add(stationInfo.getId());
+            }
         }
         getController().setStationIds(stationIds);
         getActivityDelegator().updateView();

@@ -5,6 +5,7 @@
 
     <string name="tab_station_list">Stations</string>
     <string name="tab_station_map">Map</string>
+    <string name="tab_chat">Chat</string>
     <string name="tab_settings">Settings</string>
 
     <string name="menu_refresh_title">Refresh</string>
@@ -63,11 +64,11 @@
     <string name="pref_cat_stations">Weather stations</string>
     <string name="pref_operational_station_only_title">Operational only</string>
     <string name="pref_operational_station_only_summary">Display operational weather stations only</string>
-    <string name="pref_cat_user">Credentials</string>
+    <string name="pref_cat_user">User account</string>
     <string name="pref_username_title">Email</string>
-    <string name="pref_username_summary">Your email for social tab</string>
+    <string name="pref_username_summary">Your email used for the registration</string>
     <string name="pref_password_title">Password</string>
-    <string name="pref_password_summary">Your password for social tab</string>
+    <string name="pref_password_summary">Your password</string>
 
     <string name="widget_configuration_activity_name">Select your widget station</string>
     <string name="widget_error">Unknown widget</string>

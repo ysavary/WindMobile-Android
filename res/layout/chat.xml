@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RatingBar android:id="@+id/ratingBar" android:layout_height="wrap_content" android:layout_width="wrap_content"
-        android:layout_alignParentLeft="true" />
+    <!--RatingBar android:id="@+id/ratingBar" android:layout_height="wrap_content" android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true" /-->
     <Button android:id="@+id/send" android:text="Send" android:layout_width="70dp" android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" android:layout_alignParentRight="true" />
     <EditText android:id="@+id/reply" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" android:layout_toLeftOf="@id/send" />
-    <EditText android:id="@+id/lastMessages" android:editable="false" android:gravity="bottom"
-        android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/ratingBar"
-        android:layout_above="@id/reply" />
+    <ScrollView android:id="@+id/scrollView" android:layout_width="match_parent" android:layout_height="match_parent"
+        android:layout_alignParentTop="true" android:layout_above="@id/reply">
+        <LinearLayout android:id="@+id/lastMessages" android:orientation="vertical" android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </ScrollView>
 </RelativeLayout>

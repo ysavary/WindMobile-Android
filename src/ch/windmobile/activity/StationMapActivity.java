@@ -21,7 +21,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 
-public class StationMapActivity extends MapActivity implements IClientFactoryActivity {
+public class StationMapActivity extends MapActivity implements IStationInfosActivity {
     private static int selectionZoomLevel = 11;
 
     private ClientFactory clientFactory;
@@ -39,7 +39,7 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
         mapView.setClickable(true);
 
         if (savedInstanceState != null) {
-            selectedStationId = savedInstanceState.getString(IClientFactoryActivity.SELECTED_STATION);
+            selectedStationId = savedInstanceState.getString(IStationInfosActivity.SELECTED_STATION);
         }
 
         stationOverlay = new StationOverlay(this, mapView);
@@ -51,7 +51,7 @@ public class StationMapActivity extends MapActivity implements IClientFactoryAct
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (getSelectedStationId() != null) {
-            outState.putString(IClientFactoryActivity.SELECTED_STATION, getSelectedStationId());
+            outState.putString(IStationInfosActivity.SELECTED_STATION, getSelectedStationId());
         }
     }
 

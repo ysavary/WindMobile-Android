@@ -2,6 +2,7 @@
 <resources>
     <string name="tab_station_list">Stations</string>
     <string name="tab_station_map">Plan</string>
+    <string name="tab_chat">Discussions</string>
     <string name="tab_settings">Réglages</string>
 
     <string name="menu_refresh_title">Actualiser</string>

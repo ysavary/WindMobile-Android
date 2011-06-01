@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
 import java.text.ParseException;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,7 +16,6 @@ import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
@@ -146,32 +143,6 @@ public class WindMobile extends Application {
     public static int readNetworkTimeout(Context context) {
         String value = PreferenceManager.getDefaultSharedPreferences(context).getString("networkTimeout", "20");
         return Integer.decode(value);
-    }
-
-    public static Set<String> readFavoriteStationIds(Context context) {
-        String value = PreferenceManager.getDefaultSharedPreferences(context).getString("favoriteStationIds", "");
-        String[] ids = value.split(",");
-
-        Set<String> set = new HashSet<String>(ids.length);
-        for (String id : ids) {
-            if (id.equals("") == false) {
-                set.add(id);
-            }
-        }
-        return set;
-    }
-
-    public static void writeFavoriteStationIds(Context context, Set<String> ids) {
-        StringBuilder builder = new StringBuilder();
-        for (String id : ids) {
-            if (builder.length() != 0) {
-                builder.append(",");
-            }
-            builder.append(id);
-        }
-        Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        prefsEditor.putString("favoriteStationIds", builder.toString());
-        prefsEditor.commit();
     }
 
     public static int readControlsShowDelay(Context context) {

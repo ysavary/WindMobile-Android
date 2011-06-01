@@ -1,5 +1,6 @@
 package ch.windmobile.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -24,7 +25,7 @@ import ch.windmobile.WindMobile;
 import ch.windmobile.model.StationInfo;
 import ch.windmobile.model.WindMobileException;
 
-public class StationListActivity extends StationInfosActivity implements OnItemClickListener, OnSharedPreferenceChangeListener {
+public class ChatListActivity extends StationInfosActivity implements OnItemClickListener, OnSharedPreferenceChangeListener {
 
     ListView listView;
 
@@ -113,7 +114,7 @@ public class StationListActivity extends StationInfosActivity implements OnItemC
     @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
         // Explicit intent
-        Intent intent = new Intent(StationListActivity.this, StationBrowsingActivity.class);
+        Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
         StationInfo selectedStationInfo = (StationInfo) getListAdapter().getItem(position);
         intent.putExtra(StationInfosActivity.SELECTED_STATION, selectedStationInfo.getId());
         startActivity(intent);
@@ -122,7 +123,7 @@ public class StationListActivity extends StationInfosActivity implements OnItemC
     protected final class WaitForStationInfos extends StationInfosActivity.WaitForStationInfos {
         @Override
         protected void onPreExecute() {
-            listView.setAdapter(new LoadingListAdapter(StationListActivity.this, R.layout.station_row_loading));
+            listView.setAdapter(new LoadingListAdapter(ChatListActivity.this, R.layout.station_row_loading));
         }
 
         @Override
@@ -131,8 +132,8 @@ public class StationListActivity extends StationInfosActivity implements OnItemC
                 setStationInfos(stationInfos);
             } else {
                 if (!isFinishing()) {
-                    WindMobileException clientException = WindMobile.createException(StationListActivity.this, error);
-                    WindMobile.buildFatalErrorDialog(StationListActivity.this, clientException).show();
+                    WindMobileException clientException = WindMobile.createException(ChatListActivity.this, error);
+                    WindMobile.buildFatalErrorDialog(ChatListActivity.this, clientException).show();
                 }
             }
         }
@@ -145,7 +146,15 @@ public class StationListActivity extends StationInfosActivity implements OnItemC
 
     @Override
     public void setStationInfos(List<StationInfo> stationInfos) {
-        StationInfoListAdapter adapter = new StationInfoListAdapter(this, stationInfos, R.layout.station_row, isLandscape());
+        // Display only favorites stations
+        List<StationInfo> favoritesStations = new ArrayList<StationInfo>();
+        for (StationInfo stationInfo : stationInfos) {
+            if (stationInfo.isFavorite()) {
+                favoritesStations.add(stationInfo);
+            }
+        }
+
+        StationInfoListAdapter adapter = new StationInfoListAdapter(this, favoritesStations, R.layout.chat_station_row, isLandscape());
         adapter.setClientFactory(getClientFactory());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);

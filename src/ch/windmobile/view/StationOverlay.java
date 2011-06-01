@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
-import ch.windmobile.activity.IClientFactoryActivity;
+import ch.windmobile.activity.StationInfosActivity;
 import ch.windmobile.activity.StationBrowsingActivity;
 import ch.windmobile.activity.StationMapActivity;
 import ch.windmobile.model.StationData;
@@ -162,7 +162,7 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
     public void onClick(View v) {
         // Explicit intent
         Intent intent = new Intent(getActivity(), StationBrowsingActivity.class);
-        intent.putExtra(IClientFactoryActivity.SELECTED_STATION, currentStationId);
+        intent.putExtra(StationInfosActivity.SELECTED_STATION, currentStationId);
         getActivity().startActivity(intent);
 
         dismissPopup(true);

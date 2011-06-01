@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +27,12 @@ import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 
 public class ClientFactory {
-    private static final DateFormat _dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private static final ThreadLocal<DateFormat> dateTimeFormat = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        }
+    };
     private static final long RED_STATUS_WAITING_TIME = 15 * 60 * 1000;
     private static final long WAITING_TIME = 1 * 60 * 1000;
 
@@ -75,7 +82,6 @@ public class ClientFactory {
         stationInfo.setLongitude((int) (longitude * 1E6));
 
         stationInfo.setMaintenanceStatus(stationInfoJson.getString("@maintenanceStatus"));
-        stationInfo.setFavorite(WindMobile.readFavoriteStationIds(context).contains(stationInfo.getId()));
 
         return stationInfo;
     }
@@ -114,6 +120,18 @@ public class ClientFactory {
                 StationInfo stationInfo = createStationInfo(stationInfoJson);
                 stationInfosCache.put(stationInfo.getId(), stationInfo);
             }
+        }
+
+        // Get favorites from server
+        try {
+            for (String id : getFavorites()) {
+                StationInfo stationInfo = stationInfosCache.get(id);
+                if (stationInfo != null) {
+                    stationInfo.setFavorite(true);
+                }
+            }
+        } catch (Exception e) {
+            Log.e("WindMobile", "ClientFactory() --> Unable to get favorites from server", e);
         }
 
         if (stationInfosCache.size() == 0) {
@@ -169,11 +187,9 @@ public class ClientFactory {
         JSONObject stationDataJson = restClient.get(serverUrl);
 
         StationData stationData = new StationData();
-        // DateFormat are NOT thread safe
-        DateFormat dateTimeFormat = (DateFormat) _dateTimeFormat.clone();
-        Date lastUpdate = dateTimeFormat.parse(stationDataJson.getString("@lastUpdate"));
+        Date lastUpdate = dateTimeFormat.get().parse(stationDataJson.getString("@lastUpdate"));
         stationData.setLastUpdate(lastUpdate);
-        Date expirationDate = dateTimeFormat.parse(stationDataJson.getString("@expirationDate"));
+        Date expirationDate = dateTimeFormat.get().parse(stationDataJson.getString("@expirationDate"));
         stationData.setExpirationDate(expirationDate);
         stationData.setStatus(stationDataJson.getString("@status"));
 
@@ -223,35 +239,28 @@ public class ClientFactory {
         return windChartData;
     }
 
-    private String createMessage(JSONObject messageJson) throws ParseException, JSONException {
-        final DateFormat dateTimeFormat = new SimpleDateFormat("HH:mm:ss");
-        String result = "";
-
-        Date date = _dateTimeFormat.parse(messageJson.getString("date"));
-        result += dateTimeFormat.format(date);
-        result += " (" + messageJson.getString("pseudo") + ") : ";
-        result += messageJson.getString("text");
-
-        return result;
+    private Message createMessage(JSONObject messageJson) throws ParseException, JSONException {
+        Date date = dateTimeFormat.get().parse(messageJson.getString("date"));
+        return new Message(date, messageJson.getString("pseudo"), messageJson.getString("text"));
     }
 
-    public String getLastMessages() throws ServerException, ClientProtocolException, IOException, JSONException {
-        final String chatRoomId = "test";
+    public List<Message> getLastMessages(String chatRoom, int numberOfMessages) throws ServerException, ClientProtocolException, IOException,
+        JSONException {
+        ArrayList<Message> result = new ArrayList<Message>();
 
-        String serverUrl = createServerUrl("chatrooms/" + chatRoomId + "/lastmessages/" + 5);
+        String serverUrl = createServerUrl("chatrooms/" + chatRoom + "/lastmessages/" + numberOfMessages);
         JSONObject messagesJson;
         try {
             messagesJson = restClient.get(serverUrl);
         } catch (JSONException e) {
-            return "";
+            return result;
         }
 
-        String result = "";
         JSONArray messageListJson = messagesJson.optJSONArray("message");
         if (messageListJson != null) {
             for (int i = 0; i < messageListJson.length(); i++) {
                 try {
-                    result += createMessage(messageListJson.getJSONObject(i)) + "\n";
+                    result.add(createMessage(messageListJson.getJSONObject(i)));
                 } catch (Exception e) {
                     Log.e("WindMobile", "ClientFactory() --> Ignored message", e);
                 }
@@ -260,7 +269,7 @@ public class ClientFactory {
             JSONObject messageJson = messagesJson.optJSONObject("message");
             if (messageJson != null) {
                 try {
-                    result += createMessage(messageJson) + "\n";
+                    result.add(createMessage(messageJson));
                 } catch (ParseException e) {
                     Log.e("WindMobile", "ClientFactory() --> Ignored message", e);
                 }
@@ -270,13 +279,99 @@ public class ClientFactory {
         return result;
     }
 
-    public void postMessage(String message) throws ServerException, ClientProtocolException, IOException, JSONException {
-        final String chatRoomId = "test";
+    public List<Long> getLastMessageIds(List<String> chatRoomIds) throws ServerException, ClientProtocolException, IOException, JSONException {
+        List<Long> result = new ArrayList<Long>();
+
+        String serverUrl = createServerUrl("chatrooms/lastmessages");
+        if (chatRoomIds.size() > 0) {
+            serverUrl += "?";
+            for (String chatRoomId : chatRoomIds) {
+                serverUrl += "chatRoomId=";
+                serverUrl += chatRoomId;
+                serverUrl += "&";
+            }
+        }
+
+        JSONObject messagesJson;
+        try {
+            messagesJson = restClient.get(serverUrl);
+        } catch (JSONException e) {
+            return result;
+        }
+
+        JSONArray messageListJson = messagesJson.optJSONArray("messageId");
+        if (messageListJson != null) {
+            for (int i = 0; i < messageListJson.length(); i++) {
+                try {
+                    result.add(messageListJson.getLong(i));
+                } catch (Exception e) {
+                    Log.e("WindMobile", "ClientFactory() --> Ignored message", e);
+                }
+            }
+        } else {
+            JSONObject messageJson = messagesJson.optJSONObject("messageId");
+            if (messageJson != null) {
+                // try {
+                result.add(messageJson.getLong(""));
+                // } catch (ParseException e) {
+                // Log.e("WindMobile", "ClientFactory() --> Ignored message", e);
+                // }
+            }
+        }
+
+        return result;
+    }
+
+    public void postMessage(String chatRoom, String message) throws ServerException, ClientProtocolException, IOException, JSONException {
         final String username = PreferenceManager.getDefaultSharedPreferences(context).getString("username", "");
         final String password = PreferenceManager.getDefaultSharedPreferences(context).getString("password", "");
 
-        String serverUrl = createServerUrl("chatrooms/" + chatRoomId + "/postmessage");
+        String serverUrl = createServerUrl("chatrooms/" + chatRoom + "/postmessage");
         restClient.post(serverUrl, message, username, password);
+    }
+
+    public Set<String> getFavorites() throws ServerException, ClientProtocolException, IOException, JSONException {
+        final String username = PreferenceManager.getDefaultSharedPreferences(context).getString("username", "");
+        final String password = PreferenceManager.getDefaultSharedPreferences(context).getString("password", "");
+
+        String serverUrl = createServerUrl("users/current/favorites");
+        JSONObject favorites;
+        try {
+            favorites = restClient.get(serverUrl, username, password);
+        } catch (JSONException e) {
+            return new HashSet<String>();
+        }
+
+        Set<String> result = new LinkedHashSet<String>();
+        JSONArray favoritesList = favorites.optJSONArray("stationId");
+        if (favoritesList != null) {
+            for (int i = 0; i < favoritesList.length(); i++) {
+                result.add(favoritesList.getString(i));
+            }
+        } else {
+            JSONObject favorite = favorites.optJSONObject("stationId");
+            if (favorite != null) {
+                result.add(favorite.toString());
+            }
+        }
+
+        return result;
+    }
+
+    public void addToFavorites(String stationId) throws ServerException, ClientProtocolException, IOException, JSONException {
+        final String username = PreferenceManager.getDefaultSharedPreferences(context).getString("username", "");
+        final String password = PreferenceManager.getDefaultSharedPreferences(context).getString("password", "");
+
+        String serverUrl = createServerUrl("users/current/favorites/" + stationId);
+        restClient.put(serverUrl, null, username, password);
+    }
+
+    public void removeFromFavorites(String stationId) throws ServerException, ClientProtocolException, IOException, JSONException {
+        final String username = PreferenceManager.getDefaultSharedPreferences(context).getString("username", "");
+        final String password = PreferenceManager.getDefaultSharedPreferences(context).getString("password", "");
+
+        String serverUrl = createServerUrl("users/current/favorites/" + stationId);
+        restClient.delete(serverUrl, username, password);
     }
 
     public String getUrl() {

@@ -21,7 +21,7 @@ import ch.windmobile.WindMobile;
 import ch.windmobile.model.StationInfo;
 import ch.windmobile.model.WindMobileException;
 
-public class WidgetConfigurationActivity extends ClientFactoryActivity implements OnItemClickListener {
+public class WidgetConfigurationActivity extends StationInfosActivity implements OnItemClickListener {
 
     private static final String PREFS_NAME = "ch.windmobile.activity.WidgetConfigurationActivity";
     private static final String PREF_STATION_ID_KEY = "station_id_";
@@ -79,7 +79,7 @@ public class WidgetConfigurationActivity extends ClientFactoryActivity implement
         finish();
     }
 
-    protected final class WaitForStationInfos extends ClientFactoryActivity.WaitForStationInfos {
+    protected final class WaitForStationInfos extends StationInfosActivity.WaitForStationInfos {
         @Override
         protected void onPreExecute() {
             listView.setAdapter(new LoadingListAdapter(WidgetConfigurationActivity.this, R.layout.station_row_loading));

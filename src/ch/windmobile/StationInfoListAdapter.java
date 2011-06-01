@@ -12,11 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import ch.windmobile.model.ClientFactory;
 import ch.windmobile.model.StationInfo;
 
 public class StationInfoListAdapter extends BaseAdapter {
 
-    private Context context;
+    private final Context context;
+    ClientFactory clientFactory;
     private final List<StationInfo> stationInfos;
     private int rowResource;
     private boolean isLandscape;
@@ -28,6 +30,10 @@ public class StationInfoListAdapter extends BaseAdapter {
         this.rowResource = rowResource;
         this.isLandscape = isLandscape;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void setClientFactory(ClientFactory clientFactory) {
+        this.clientFactory = clientFactory;
     }
 
     public List<StationInfo> getStationInfos() {
@@ -82,11 +88,25 @@ public class StationInfoListAdapter extends BaseAdapter {
         }
 
         // Optional favorite checkbox
-        if (favorite != null) {
+        if ((favorite != null) && (clientFactory != null)) {
             favorite.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     stationInfo.setFavorite(isChecked);
+                    if (isChecked) {
+                        try {
+                            clientFactory.addToFavorites(stationInfo.getId());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            clientFactory.removeFromFavorites(stationInfo.getId());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
             });
             favorite.setChecked(stationInfo.isFavorite());

@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
-import ch.windmobile.activity.IClientFactoryActivity;
+import ch.windmobile.activity.StationInfosActivity;
 import ch.windmobile.activity.StationBrowsingActivity;
 import ch.windmobile.activity.WidgetConfigurationActivity;
 import ch.windmobile.model.ClientFactory;
@@ -65,7 +65,7 @@ public class WidgetProvider extends AppWidgetProvider {
         // (http://groups.google.com/group/android-developers/browse_thread/thread/f954ff1dc3ad5d6a)
         Intent updateIntent = new Intent(context, UpdateService.class);
         updateIntent.putExtra(WIDGET_ID, widgetId);
-        updateIntent.putExtra(IClientFactoryActivity.SELECTED_STATION, stationId);
+        updateIntent.putExtra(StationInfosActivity.SELECTED_STATION, stationId);
         updateIntent.putExtra(STATION_NAME, stationName);
         context.startService(updateIntent);
     }
@@ -78,7 +78,7 @@ public class WidgetProvider extends AppWidgetProvider {
         @Override
         public void onHandleIntent(Intent intent) {
             int widgetId = intent.getIntExtra(WIDGET_ID, 0);
-            String stationId = intent.getStringExtra(IClientFactoryActivity.SELECTED_STATION);
+            String stationId = intent.getStringExtra(StationInfosActivity.SELECTED_STATION);
             String stationName = intent.getStringExtra(STATION_NAME);
 
             int retry = 0;
@@ -115,7 +115,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             Intent intent = new Intent(context, StationBrowsingActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra(IClientFactoryActivity.SELECTED_STATION, stationId);
+            intent.putExtra(StationInfosActivity.SELECTED_STATION, stationId);
             // Force each widget to have a unique PendingIntent
             // (http://stackoverflow.com/questions/4011178/multiple-instances-of-widget-only-updating-last-widget)
             Uri data = Uri.withAppendedPath(Uri.parse("WIDGET" + "://widget/id/"), String.valueOf(widgetId));
