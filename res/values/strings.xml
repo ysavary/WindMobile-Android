@@ -45,6 +45,7 @@
     <string name="temperature_unit">°C</string>
     <string name="humidity_unit">% rel</string>
 
+    <string name="server_unauthorized_error">Unauthorized</string>
     <string name="server_connection_error">Network error</string>
     <string name="server_invalid_data">Data error</string>
     <string name="server_database_error">Database error</string>

@@ -16,7 +16,7 @@
         <activity android:label="@string/app_name" android:name=".activity.StationMapActivity" />
         <activity android:label="@string/app_name" android:name=".activity.ChatListActivity" />
         <activity android:label="@string/app_name" android:name=".activity.ChatActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity android:label="@string/app_name" android:name=".activity.PreferencesActivity" />
         <activity android:label="@string/widget_configuration_activity_name" android:name=".activity.WidgetConfigurationActivity"
             android:theme="@android:style/Theme.Dialog">
@@ -34,7 +34,7 @@
 
         <service android:name=".WidgetProvider$UpdateService" />
     </application>
-    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="9" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 </manifest> 

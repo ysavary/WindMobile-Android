@@ -194,6 +194,10 @@ public class RestClient {
                 int errorCode = jsonObject.getInt("code");
                 CharSequence localizedName;
                 switch (errorCode) {
+                case -5:
+                    localizedName = getContext().getText(R.string.server_unauthorized_error);
+                    break;
+
                 case -4:
                     localizedName = getContext().getText(R.string.server_connection_error);
                     break;

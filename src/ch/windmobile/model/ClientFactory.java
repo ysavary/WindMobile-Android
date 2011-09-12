@@ -241,7 +241,7 @@ public class ClientFactory {
 
     private Message createMessage(JSONObject messageJson) throws ParseException, JSONException {
         Date date = dateTimeFormat.get().parse(messageJson.getString("date"));
-        return new Message(date, messageJson.getString("pseudo"), messageJson.getString("text"));
+        return new Message(date, messageJson.getString("pseudo"), messageJson.getString("text"), messageJson.getString("emailHash"));
     }
 
     public List<Message> getLastMessages(String chatRoom, int numberOfMessages) throws ServerException, ClientProtocolException, IOException,
