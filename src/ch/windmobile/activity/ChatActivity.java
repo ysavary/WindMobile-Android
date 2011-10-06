@@ -3,7 +3,6 @@ package ch.windmobile.activity;
 import java.util.List;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -13,20 +12,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import ch.windmobile.ImageLoader;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 import ch.windmobile.model.Message;
 import ch.windmobile.model.WindMobileException;
+import ch.windmobile.view.ChatListView;
 
-public class ChatActivity extends ClientFactoryActivity implements OnClickListener {
+public class ChatActivity extends ClientFactoryActivity {
 
     private View view;
     private String chatRoom;
     private ImageLoader imageLoader;
-    private ListView messagesList;
+    private ChatListView messagesList;
     private ArrayAdapter<Message> messagesAdapter;
 
     @Override
@@ -35,7 +34,21 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
 
         view = View.inflate(this, R.layout.chat, null);
         setContentView(view);
-        messagesList = (ListView) view.findViewById(R.id.messages);
+        messagesList = (ChatListView) view.findViewById(R.id.messages);
+
+        Button refresh = (Button) view.findViewById(R.id.refresh_button);
+        refresh.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    refresh();
+                } catch (Exception e) {
+                    WindMobileException clientException = WindMobile.createException(ChatActivity.this, e);
+                    WindMobile.buildErrorDialog(ChatActivity.this, clientException).show();
+                }
+            }
+        });
+
         messagesAdapter = new MessageAdapter(this);
         messagesList.setAdapter(messagesAdapter);
 
@@ -48,8 +61,18 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
 
         imageLoader = new ImageLoader(this, R.drawable.mystery_man, 80);
 
-        Button send = (Button) view.findViewById(R.id.send);
-        send.setOnClickListener(this);
+        Button send = (Button) view.findViewById(R.id.send_button);
+        send.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    postMessage();
+                } catch (Exception e) {
+                    WindMobileException clientException = WindMobile.createException(ChatActivity.this, e);
+                    WindMobile.buildErrorDialog(ChatActivity.this, clientException).show();
+                }
+            }
+        });
     }
 
     protected String computeGravatarLink(String emailHash) {
@@ -63,7 +86,19 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
         for (int i = messages.size() - 1; i >= 0; i--) {
             messagesAdapter.add(messages.get(i));
         }
+
+        messagesAdapter.notifyDataSetChanged();
         return messagesAdapter.getCount();
+    }
+
+    public void postMessage() throws Exception {
+        TextView reply = (TextView) view.findViewById(R.id.reply);
+        String text = reply.getText().toString();
+        if (text.equals("") == false) {
+            getClientFactory().postMessage(chatRoom, text);
+            reply.setText(null);
+            refresh();
+        }
     }
 
     @Override
@@ -72,21 +107,7 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
 
         try {
             int nbMessages = refresh();
-            messagesAdapter.notifyDataSetChanged();
-            messagesList.smoothScrollToPosition(nbMessages);
-        } catch (Exception e) {
-            WindMobileException clientException = WindMobile.createException(this, e);
-            WindMobile.buildErrorDialog(this, clientException).show();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        TextView reply = (TextView) view.findViewById(R.id.reply);
-        try {
-            getClientFactory().postMessage(chatRoom, reply.getText().toString());
-            reply.setText(null);
-            refresh();
+            messagesList.setSelection(nbMessages - 1);
         } catch (Exception e) {
             WindMobileException clientException = WindMobile.createException(this, e);
             WindMobile.buildErrorDialog(this, clientException).show();
@@ -122,20 +143,4 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
             return cell;
         }
     };
-
-    private class RefreshTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                refresh();
-            } catch (Exception e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            messagesAdapter.notifyDataSetChanged();
-        }
-    }
 }
