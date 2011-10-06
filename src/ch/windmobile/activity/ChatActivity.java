@@ -2,32 +2,32 @@ package ch.windmobile.activity;
 
 import java.util.List;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import ch.windmobile.ImageLoader;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
 import ch.windmobile.model.Message;
 import ch.windmobile.model.WindMobileException;
-import ch.windmobile.view.ChatScrollView;
 
-public class ChatActivity extends ClientFactoryActivity implements OnClickListener, ChatScrollView.OverScrollListener {
+public class ChatActivity extends ClientFactoryActivity implements OnClickListener {
 
     private View view;
     private String chatRoom;
     private ImageLoader imageLoader;
-    private ChatScrollView scrollView;
-    private LinearLayout lastMessages;
-    private View refreshView;
-    private RefreshTask refreshTask;
+    private ListView messagesList;
+    private ArrayAdapter<Message> messagesAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,13 +35,9 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
 
         view = View.inflate(this, R.layout.chat, null);
         setContentView(view);
-        scrollView = (ChatScrollView) view.findViewById(R.id.scrollView);
-        scrollView.setOverScrollListener(this);
-        lastMessages = (LinearLayout) view.findViewById(R.id.lastMessages);
-
-        // Refresh view on overscroll
-        refreshView = new TextView(this);
-        ((TextView) refreshView).setText("Refreshing...");
+        messagesList = (ListView) view.findViewById(R.id.messages);
+        messagesAdapter = new MessageAdapter(this);
+        messagesList.setAdapter(messagesAdapter);
 
         if (savedInstanceState != null) {
             chatRoom = savedInstanceState.getString(StationInfosActivity.SELECTED_STATION);
@@ -60,41 +56,28 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
         return "http://www.gravatar.com/avatar/" + emailHash + ".jpg" + "?d=retro";
     }
 
-    public void refresh() {
-        lastMessages.removeAllViews();
+    public int refresh() throws Exception {
+        messagesAdapter.clear();
 
-        try {
-            List<Message> messages = getClientFactory().getLastMessages(chatRoom, 10);
-
-            for (int i = messages.size() - 1; i >= 0; i--) {
-                Message message = messages.get(i);
-
-                RelativeLayout cell = (RelativeLayout) View.inflate(this, R.layout.chat_cell, null);
-
-                ImageView avatar = (ImageView) cell.findViewById(R.id.avatar);
-                TextView pseudo = (TextView) cell.findViewById(R.id.pseudo);
-                TextView date = (TextView) cell.findViewById(R.id.date);
-                TextView text = (TextView) cell.findViewById(R.id.text);
-
-                imageLoader.displayImage(computeGravatarLink(message.getEmailHash()), this, avatar);
-                pseudo.setText(message.getPseudo());
-                date.setText(DateUtils.getRelativeTimeSpanString(message.getDate().getTime()));
-                text.setText(message.getText());
-
-                lastMessages.addView(cell);
-                scrollView.showLastMessage();
-            }
-        } catch (Exception e) {
-            WindMobileException clientException = WindMobile.createException(this, e);
-            WindMobile.buildErrorDialog(this, clientException).show();
+        List<Message> messages = getClientFactory().getLastMessages(chatRoom, 10);
+        for (int i = messages.size() - 1; i >= 0; i--) {
+            messagesAdapter.add(messages.get(i));
         }
+        return messagesAdapter.getCount();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        refresh();
+        try {
+            int nbMessages = refresh();
+            messagesAdapter.notifyDataSetChanged();
+            messagesList.smoothScrollToPosition(nbMessages);
+        } catch (Exception e) {
+            WindMobileException clientException = WindMobile.createException(this, e);
+            WindMobile.buildErrorDialog(this, clientException).show();
+        }
     }
 
     @Override
@@ -110,34 +93,49 @@ public class ChatActivity extends ClientFactoryActivity implements OnClickListen
         }
     }
 
-    @Override
-    public void onOverScroll(int scrollY) {
-        if ((scrollY > 0) && (refreshTask == null)) {
-            refreshTask = new RefreshTask();
-            refreshTask.execute();
+    private class MessageAdapter extends ArrayAdapter<Message> {
+        public MessageAdapter(Context context) {
+            super(context, 0);
         }
-    }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View cell = convertView;
+            if (cell == null) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                cell = inflater.inflate(R.layout.chat_cell, parent, false);
+            }
+            Message message = getItem(position);
+            try {
+                ImageView avatar = (ImageView) cell.findViewById(R.id.avatar);
+                TextView pseudo = (TextView) cell.findViewById(R.id.pseudo);
+                TextView date = (TextView) cell.findViewById(R.id.date);
+                TextView text = (TextView) cell.findViewById(R.id.text);
+
+                imageLoader.displayImage(computeGravatarLink(message.getEmailHash()), ChatActivity.this, avatar);
+                pseudo.setText(message.getPseudo());
+                date.setText(DateUtils.getRelativeTimeSpanString(message.getDate().getTime()));
+                text.setText(message.getText());
+            } catch (Exception e) {
+            }
+
+            return cell;
+        }
+    };
 
     private class RefreshTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected void onPreExecute() {
-            refresh();
-            lastMessages.addView(refreshView);
-        }
-
-        @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
+                refresh();
+            } catch (Exception e) {
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            lastMessages.removeView(refreshView);
-            refreshTask = null;
+            messagesAdapter.notifyDataSetChanged();
         }
     }
 }
