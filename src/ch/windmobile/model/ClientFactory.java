@@ -264,7 +264,7 @@ public class ClientFactory {
         JSONException {
         ArrayList<Message> result = new ArrayList<Message>();
 
-        String serverUrl = createServerUrl("chatrooms/" + chatRoom + "/lastmessages/" + numberOfMessages);
+        String serverUrl = createServerUrl("chatrooms/" + chatRoom, "?maxCount=" + numberOfMessages);
         JSONObject messagesJson;
         try {
             messagesJson = restClient.get(serverUrl);
@@ -298,11 +298,11 @@ public class ClientFactory {
     public List<Long> getLastMessageIds(List<String> chatRoomIds) throws ServerException, ClientProtocolException, IOException, JSONException {
         List<Long> result = new ArrayList<Long>();
 
-        String serverUrl = createServerUrl("chatrooms/lastmessages");
+        String serverUrl = createServerUrl("chatrooms");
         if (chatRoomIds.size() > 0) {
             serverUrl += "?";
             for (String chatRoomId : chatRoomIds) {
-                serverUrl += "chatRoomId=";
+                serverUrl += "chatroom=";
                 serverUrl += chatRoomId;
                 serverUrl += "&";
             }
@@ -338,11 +338,11 @@ public class ClientFactory {
         return result;
     }
 
-    public void postMessage(String chatRoom, String message) throws ServerException, ClientProtocolException, IOException, JSONException {
+    public void postMessage(String chatRoomId, String message) throws ServerException, ClientProtocolException, IOException, JSONException {
         final String username = PreferenceManager.getDefaultSharedPreferences(context).getString("username", "");
         final String password = PreferenceManager.getDefaultSharedPreferences(context).getString("password", "");
 
-        String serverUrl = createServerUrl("chatrooms/" + chatRoom + "/postmessage");
+        String serverUrl = createServerUrl("chatrooms/" + chatRoomId);
         restClient.post(serverUrl, message, username, password);
     }
 
