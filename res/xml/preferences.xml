@@ -1,5 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Wind Mobile (1.0)" />
+    <PreferenceCategory android:title="Wind Mobile (1.0.1)" />
 
     <ListPreference android:key="mapType" android:title="@string/pref_map_type_title"
         android:dialogTitle="@string/pref_map_type_title" android:entries="@array/map_type" android:entryValues="@array/map_type_value"
