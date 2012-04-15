@@ -11,6 +11,6 @@
         android:layout_width="wrap_content" android:layout_height="fill_parent" android:gravity="center_vertical"
         android:paddingRight="5sp" />
     <TextView android:id="@+id/row_name" style="@style/list_text" android:layout_width="fill_parent"
-        android:layout_height="fill_parent" android:layout_toRightOf="@id/row_maintenance_status" android:gravity="center_vertical"
-        android:paddingRight="5sp" />
+        android:layout_height="fill_parent" android:singleLine="true" android:ellipsize="end" android:layout_toRightOf="@id/row_maintenance_status"
+        android:layout_toLeftOf="@id/row_altitude" android:gravity="center_vertical" android:paddingRight="5sp" />
 </RelativeLayout>
