@@ -23,9 +23,9 @@ import ch.windmobile.model.WindMobileException;
 
 public class WidgetConfigurationActivity extends ClientFactoryActivity implements OnItemClickListener {
 
-    private static final String PREFS_NAME = "ch.windmobile.activity.WidgetConfigurationActivity";
-    private static final String PREF_STATION_ID_KEY = "station_id_";
-    private static final String PREF_STATION_NAME_KEY = "station_name_";
+    public static final String PREFS_NAME = "ch.windmobile.activity.WidgetConfigurationActivity";
+    public static final String PREF_STATION_ID_KEY = "station_id_";
+    public static final String PREF_STATION_NAME_KEY = "station_name_";
 
     ListView listView;
     int widgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -48,11 +48,11 @@ public class WidgetConfigurationActivity extends ClientFactoryActivity implement
         }
     }
 
-    StationInfoListAdapter getListAdapter() {
+    public StationInfoListAdapter getListAdapter() {
         return (StationInfoListAdapter) listView.getAdapter();
     }
 
-    Set<String> getFavoriteIds() {
+    public Set<String> getFavoriteIds() {
         try {
             Set<String> favoriteIds = new HashSet<String>();
             for (StationInfo stationInfo : getListAdapter().getStationInfos()) {
@@ -68,10 +68,10 @@ public class WidgetConfigurationActivity extends ClientFactoryActivity implement
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
-        StationInfo selectedStationInfo = (StationInfo) getListAdapter().getItem(position);
+        StationInfo stationInfo = (StationInfo) getListAdapter().getItem(position);
 
-        saveWidgetStationInfo(this, widgetId, selectedStationInfo);
-        WidgetProvider.updateWidget(this, widgetId);
+        saveWidgetStationInfo(this, widgetId, stationInfo);
+        WidgetProvider.updateWidgetInService(this, widgetId, stationInfo.getId());
 
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
@@ -113,31 +113,23 @@ public class WidgetConfigurationActivity extends ClientFactoryActivity implement
         getWaitForStationInfos().execute();
     }
 
-    private static String getStationIdKey(int widgetId) {
-        return PREF_STATION_ID_KEY + widgetId;
-    }
-
-    private static String getStationNameKey(int widgetId) {
-        return PREF_STATION_NAME_KEY + widgetId;
-    }
-
     public static void saveWidgetStationInfo(Context context, int widgetId, StationInfo stationInfo) {
-        SharedPreferences.Editor prefsEditor = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefsEditor.putString(getStationIdKey(widgetId), stationInfo.getId());
-        prefsEditor.putString(getStationNameKey(widgetId), stationInfo.getName());
+        SharedPreferences.Editor prefsEditor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        prefsEditor.putString(PREF_STATION_ID_KEY + widgetId, stationInfo.getId());
+        prefsEditor.putString(PREF_STATION_NAME_KEY + widgetId, stationInfo.getShortName());
         prefsEditor.commit();
     }
 
     public static void deleteWidgetId(Context context, int widgetId) {
-        SharedPreferences.Editor prefsEditor = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefsEditor.remove(getStationIdKey(widgetId));
-        prefsEditor.remove(getStationNameKey(widgetId));
+        SharedPreferences.Editor prefsEditor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        prefsEditor.remove(PREF_STATION_ID_KEY + widgetId);
+        prefsEditor.remove(PREF_STATION_NAME_KEY + widgetId);
+        prefsEditor.commit();
     }
 
     public static String loadWidgetStationId(Context context, int widgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String key = getStationIdKey(widgetId);
-        String stationId = prefs.getString(key, null);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String stationId = prefs.getString(PREF_STATION_ID_KEY + widgetId, null);
         if (stationId != null) {
             return stationId;
         } else {
@@ -146,11 +138,10 @@ public class WidgetConfigurationActivity extends ClientFactoryActivity implement
     }
 
     public static String loadWidgetStationName(Context context, int widgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String key = getStationNameKey(widgetId);
-        String stationId = prefs.getString(key, null);
-        if (stationId != null) {
-            return stationId;
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String stationName = prefs.getString(PREF_STATION_NAME_KEY + widgetId, null);
+        if (stationName != null) {
+            return stationName;
         } else {
             throw new RuntimeException("Unable to get stationName for widget id '" + widgetId + "'");
         }
