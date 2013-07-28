@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import ch.windmobile.R;
 import ch.windmobile.WindMobile;
@@ -158,12 +159,15 @@ public class ClientFactory {
         return null;
     }
 
-    public StationData getStationData(String stationId) throws IOException, JSONException, ParseException, WindMobileException {
+    public StationData getStationData(String stationId, String source) throws IOException, JSONException, ParseException, WindMobileException {
         if ((stationId == null) || (stationId.equals(""))) {
             throw new ClientException(context.getText(R.string.data_error), "Invalid id");
         }
 
         String serverUrl = createServerUrl("stationdatas/" + stationId);
+        if (!TextUtils.isEmpty(source)) {
+            serverUrl += "?" + source;
+        }
         JSONObject stationDataJson = restClient.get(serverUrl);
 
         StationData stationData = new StationData();

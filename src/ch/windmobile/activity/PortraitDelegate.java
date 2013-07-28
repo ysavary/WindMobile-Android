@@ -280,7 +280,7 @@ public class PortraitDelegate implements ActivityDelegator, OnClickListener {
                 view = (View) params[0];
                 stationId = (String) params[1];
 
-                return getClientFactory().getStationData(stationId);
+                return getClientFactory().getStationData(stationId, null);
             } catch (Exception e) {
                 error = e;
                 return null;

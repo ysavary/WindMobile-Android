@@ -115,7 +115,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 try {
                     String[] serverUrls = getResources().getStringArray(R.array.servers);
                     ClientFactory clientFactory = new ClientFactory(this, serverUrls);
-                    StationData stationData = clientFactory.getStationData(stationId);
+                    StationData stationData = clientFactory.getStationData(stationId, "widget");
                     updateWidget(this, widgetId, stationId, stationName, stationData, null);
                     break;
                 } catch (Exception e) {

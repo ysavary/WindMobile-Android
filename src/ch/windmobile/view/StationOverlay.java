@@ -199,7 +199,7 @@ public class StationOverlay extends ItemizedOverlay<OverlayItem> implements OnCl
                 view = (View) params[0];
                 stationId = (String) params[1];
 
-                return activity.getClientFactory().getStationData(stationId);
+                return activity.getClientFactory().getStationData(stationId, null);
             } catch (Exception e) {
                 error = e;
                 return null;
