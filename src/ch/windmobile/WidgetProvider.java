@@ -163,10 +163,10 @@ public class WidgetProvider extends AppWidgetProvider {
                     // Takes the last value
                     float direction = directions[directions.length - 1];
                     String[] directionLabels = context.getResources().getStringArray(R.array.directions);
-                    views.setTextViewText(R.id.wind_last_direction, StationDataUtils.getWindDirectionLabel(directionLabels, direction));
+                    views.setTextViewText(R.id.wind_direction, StationDataUtils.getWindDirectionLabel(directionLabels, direction));
 
-                    views.setTextViewText(R.id.wind_last_average, stationData.getWindAverage());
-                    views.setTextViewText(R.id.wind_last_max, stationData.getWindMax());
+                    views.setTextViewText(R.id.wind_average, stationData.getWindAverage());
+                    views.setTextViewText(R.id.wind_max, stationData.getWindMax());
                 } else {
                     // Loading
                     views.setTextViewText(R.id.station_lastUpdate, context.getText(R.string.loading_text));

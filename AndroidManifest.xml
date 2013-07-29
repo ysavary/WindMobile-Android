@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="9"
-    android:versionName="1.0.2" package="ch.windmobile" android:installLocation="auto" android:debuggable="false">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10"
+    android:versionName="1.0.3" package="ch.windmobile" android:installLocation="auto" android:debuggable="false">
     <application android:icon="@drawable/windmobile" android:label="@string/app_name" android:name="WindMobile"
         android:theme="@android:style/Theme.NoTitleBar">
         <uses-library android:name="com.google.android.maps" />
