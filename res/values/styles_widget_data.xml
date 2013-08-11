@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <style name="widget_title">
         <item name="android:textSize">8sp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">#ffffff</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">true</item>
     </style>
+
     <style name="widget_label">
         <item name="android:textSize">10sp</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textColor">#a5a5a5</item>
     </style>
+
     <style name="widget_value">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">#ffffff</item>
         <item name="android:singleLine">true</item>
     </style>
+
 </resources>
